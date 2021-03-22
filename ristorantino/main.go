@@ -40,7 +40,7 @@ func consegna(c *Cameriere, cook chan Piatto, deliver chan Piatto, wg *sync.Wait
 		for len(deliver) > 0 {
 			b := <-deliver
 			time.Sleep(3 * time.Second)
-			fmt.Println(b.nome, "consegnato")
+			fmt.Println(b.nome, "consegnato da", c.nome)
 		}
 		time.Sleep(time.Second)
 	}
