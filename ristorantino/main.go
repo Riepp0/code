@@ -62,7 +62,7 @@ func main() {
 
 	wg.Wait()
 
-	wg.Add(7)
+	wg.Add(5)
 
 	//Cucina
 	deliver := make(chan Piatto, 10)
