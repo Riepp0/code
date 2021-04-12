@@ -17,12 +17,14 @@ type Cameriere struct {
 	nome string
 }
 
+//Funzione per eseguire le ordinazioni
 func ordina(p *Piatto, cook chan Piatto, wg *sync.WaitGroup) {
 	cook <- *p
 	fmt.Println(p.nome, "ordinato")
 	wg.Done()
 }
 
+//Funzione per eseguire la cottura dei piatti già ordinati
 func cucina(cook chan Piatto, deliver chan Piatto, wg *sync.WaitGroup) {
 	for len(cook) > 0 {
 		a := <-cook
@@ -34,6 +36,7 @@ func cucina(cook chan Piatto, deliver chan Piatto, wg *sync.WaitGroup) {
 	wg.Done()
 }
 
+//Funzione per eseguire la consegna dei piatti cotti
 func consegna(c *Cameriere, cook chan Piatto, deliver chan Piatto, wg *sync.WaitGroup) {
 
 	for len(cook) > 0 {
@@ -52,9 +55,11 @@ func main() {
 	var wg sync.WaitGroup
 	wg.Add(10)
 
+	//Creazione delle strutture
 	piatti := []Piatto{{"A"}, {"B"}, {"C"}, {"D"}, {"E"}, {"F"}, {"G"}, {"H"}, {"I"}, {"J"}}
 	camerieri := []Cameriere{{"Alberto"}, {"Beppe"}}
-	//Ordinazioni
+
+	//Ordinazioni simultanee
 	cook := make(chan Piatto, 10)
 	for i := range piatti {
 		go ordina(&piatti[i], cook, &wg)
@@ -64,13 +69,13 @@ func main() {
 
 	wg.Add(5)
 
-	//Cucina
+	//Cucina simultanea
 	deliver := make(chan Piatto, 10)
 	for i := 0; i < 3; i++ {
 		go cucina(cook, deliver, &wg)
 	}
 
-	//Consegna
+	//Consegna simultanea dei camerieri
 	for i := range camerieri {
 		go consegna(&camerieri[i], cook, deliver, &wg)
 	}

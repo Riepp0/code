@@ -20,6 +20,7 @@ type Cacciavite struct {
 type Trapano struct {
 }
 
+//Funzione che mi permette di assegnare il martello ad un operaio
 func pick_martello(o *Operaio, ch1 chan Martello) {
 	tool := <-ch1
 	fmt.Println("Operaio", o.nome, "prende il martello")
@@ -29,6 +30,7 @@ func pick_martello(o *Operaio, ch1 chan Martello) {
 	fmt.Println("Operaio", o.nome, "lascia il martello")
 }
 
+//Funzione che mi permette di assegnare il cacciavite ad un operaio
 func pick_cacciavite(o *Operaio, ch2 chan Cacciavite) {
 	tool := <-ch2
 	fmt.Println("Operaio", o.nome, "prende il cacciavite")
@@ -38,6 +40,7 @@ func pick_cacciavite(o *Operaio, ch2 chan Cacciavite) {
 	fmt.Println("Operaio", o.nome, "lascia il cacciavite")
 }
 
+//Funzione che mi permette di assegnare il trapano ad un operaio
 func pick_trapano(o *Operaio, ch3 chan Trapano) {
 	tool := <-ch3
 	fmt.Println("Operaio", o.nome, "prende il trapano")
@@ -47,6 +50,7 @@ func pick_trapano(o *Operaio, ch3 chan Trapano) {
 	fmt.Println("Operaio", o.nome, "lascia il trapano")
 }
 
+//Funzione che mi permette di distinguere i casi in cui un determinato utensile può essere preso
 func use(o *Operaio, ch1 chan Martello, ch2 chan Cacciavite, ch3 chan Trapano) {
 	switch o.trapanato {
 	case 0: //Martello o Trapano
@@ -75,7 +79,7 @@ func use(o *Operaio, ch1 chan Martello, ch2 chan Cacciavite, ch3 chan Trapano) {
 		pick_martello(o, ch1)
 		break
 	default:
-		fmt.Println("XD")
+		fmt.Println("???")
 
 	}
 }
@@ -84,6 +88,7 @@ func main() {
 	var wg sync.WaitGroup
 	wg.Add(3)
 
+	//Dichiarazione strutture e variabili
 	operai := []Operaio{{"Albero", 0}, {"Boris", 0}, {"Cavallo", 0}}
 	var m Martello
 	var c Cacciavite
@@ -100,6 +105,7 @@ func main() {
 	ch3 <- t
 	ch3 <- t1
 
+	//Ciclando sugli operai chiamo la funzione per prendere gli utensili
 	for i := range operai {
 		go func(_x int) {
 			use(&operai[_x], ch1, ch2, ch3)

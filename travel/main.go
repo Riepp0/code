@@ -52,6 +52,7 @@ func stampaPartecipanti(c []Cliente, v []Viaggio) {
 
 }
 
+//Creo le strutture e chiamo i metodi
 func main() {
 	clienti := []Cliente{{"A", ""}, {"B", ""}, {"C", ""}, {"D", ""}, {"E", ""}, {"F", ""}, {"G", ""}}
 	mete := []Viaggio{{"Francia"}, {"Spagna"}}
@@ -60,10 +61,11 @@ func main() {
 
 	var wg sync.WaitGroup
 	wg.Add(len(clienti))
+	//Ciclo sui clienti ed eseguo contemporaneamente le prenotazioni tra Spagna e Francia con un rand
 	for i := range clienti {
 		go prenota(&clienti[i], mete, &wg)
 	}
 	wg.Wait()
-
+	//Stampo dove vanno i clienti se le rispettive mete vengono confermate
 	stampaPartecipanti(clienti, mete)
 }
