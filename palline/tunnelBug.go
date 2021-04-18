@@ -40,7 +40,7 @@ func mandaPersona(g *Gruppo, t chan Tunnel, c1 chan int) {
 			//tunnel.libero = true			(variabile booleana non server)
 			t <- tunnel
 			fmt.Println("passato")
-			g.nPalline = g.nPalline - 1
+			g.nPalline--
 			fmt.Println("rimangono ", g.nPalline, " nel gruppo ", g.nome)
 		}
 		//time.Sleep(time.Duration(4)*time.Second)
