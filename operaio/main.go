@@ -89,12 +89,13 @@ func main() {
 	wg.Add(3)
 
 	//Dichiarazione strutture e variabili
-	operai := []Operaio{{"Albero", 0}, {"Boris", 0}, {"Cavallo", 0}}
+	operai := []Operaio{{"Albero", 0}, {"Bart", 0}, {"Carlo", 0}}
 	var m Martello
 	var c Cacciavite
 	var t Trapano
 	var t1 Trapano
 
+	//Creo channel buffered per ogni strumento
 	ch1 := make(chan Martello, 1)
 	ch1 <- m
 

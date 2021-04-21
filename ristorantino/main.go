@@ -57,7 +57,7 @@ func main() {
 
 	//Creazione delle strutture
 	piatti := []Piatto{{"A"}, {"B"}, {"C"}, {"D"}, {"E"}, {"F"}, {"G"}, {"H"}, {"I"}, {"J"}}
-	camerieri := []Cameriere{{"Alberto"}, {"Beppe"}}
+	camerieri := []Cameriere{{"Alberto"}, {"Bart"}}
 
 	//Ordinazioni simultanee
 	cook := make(chan Piatto, 10)

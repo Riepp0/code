@@ -37,7 +37,7 @@ func mandaPersona(g *Gruppo, t chan Tunnel, c1 chan int) {
 			//tunnel.libero = true 			//Libero il tunnel dopo uno scontro (variabile booleana non serve)
 		case <-time.After(time.Second):
 			//tunnel := <-t
-			//tunnel.libero = true			(variabile booleana non server)
+			//tunnel.libero = true			(variabile booleana non serve)
 			t <- tunnel
 			fmt.Println("passato")
 			g.nPalline--
