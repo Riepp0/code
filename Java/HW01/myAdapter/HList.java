@@ -1,5 +1,5 @@
 package myAdapter;
 
-public class MapAdapter {
+public interface HList {
     
 }
