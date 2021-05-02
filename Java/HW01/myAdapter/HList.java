@@ -1,6 +1,6 @@
 package myAdapter;
 
-public interface HList {
+public interface HList extends HCollection{
     /**
      * Inserts the specified element at the specified position in this list
      * (optional operation). Shifts the element currently at that position (if any)
