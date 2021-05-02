@@ -1,5 +1,7 @@
 package myAdapter;
 
-public class ListAdapter implements HList, HIterator, HCollection, HListiterator {
+public class ListAdapter implements HList, HIterator, HCollection, HListIterator {
+    
+    
     
 }
