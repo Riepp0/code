@@ -4,7 +4,7 @@ import java.util.NoSuchElementException;
 import java.util.Vector;
 
 public class ListAdapter implements HList {
-    // Subclasses
+    // Sottoclassi
 
     /**
      * Iteratore di ListAdapter, attraversa il vettore di ListAdapter
@@ -28,7 +28,7 @@ public class ListAdapter implements HList {
          * @param v
          */
         public Iterator(Vector<Object> v) {
-            this(v, 0);
+            this(v,0);
         }
 
         /**
@@ -124,20 +124,41 @@ public class ListAdapter implements HList {
 
         @Override
         public Object previous() {
-            // TODO Auto-generated method stub
-            return null;
+            if(!hasPrevious())
+                throw new NoSuchElementException();
+            next = false;
+            prev = true;
+            return vector.elementAt(--index);
         }
 
         @Override
         public int previousIndex() {
-            // TODO Auto-generated method stub
-            return 0;
+            return index - 1;
+        }
+
+        @Override
+        public void remove(){
+            if(!next && !prev)
+                throw new IllegalStateException();
+            if(prev){
+                vector.removeElementAt(index);
+                prev = next = false;
+            }
+            else super.remove();
         }
 
         @Override
         public void set(Object o) {
-            // TODO Auto-generated method stub
-            
+            if(o == null)
+                throw new NullPointerException();
+            if(vector.isEmpty())
+                add(o);
+            if(!next && !prev)
+                throw new IllegalStateException();
+            if(next)
+                vector.setElementAt(o, index-1);
+            if(prev)
+                vector.setElementAt(o, index);
         }
     }
 
