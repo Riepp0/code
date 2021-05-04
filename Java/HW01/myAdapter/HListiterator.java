@@ -1,6 +1,6 @@
 package myAdapter;
 
-public interface HListIterator{
+public interface HListIterator extends HIterator{
 
     /**
      * Inserts the specified element into the list (optional operation). The element

@@ -12,15 +12,30 @@ public class ListAdapter implements HList {
     private class Iterator implements HIterator {
 
         protected Vector<Object> vector;
+
         /**
          * Indice della posizione dell'iteratore
          */
-        
         protected int index;
+
         /**
          * Variabile usata per iterare
          */
         protected boolean next;
+
+        /**
+         * Costruttore di Iterator partendo dall'indice del vettore
+         * 
+         * @param v
+         * @param index
+         */
+        public Iterator(Vector<Object> v, int index) {
+            if(index < 0 || index > size())
+                throw new IllegalArgumentException();
+            vector = v;
+            this.index = index;
+            next = false;
+        }
 
         /**
          * Costruttore di Iterator dal vettore
@@ -31,21 +46,10 @@ public class ListAdapter implements HList {
             this(v,0);
         }
 
-        /**
-         * Costruttore di Iterator partendo dall'indice del vettore
-         * 
-         * @param v
-         * @param index
-         */
-        public Iterator(Vector<Object> v, int index) {
-            this.vector = v;
-            this.index = index;
-            next = false;
-        }
 
         @Override
         public boolean hasNext() {
-            return index < vector.size();
+            return index < vector.size()-1;
         }
 
         @Override
@@ -83,6 +87,12 @@ public class ListAdapter implements HList {
             prev = false;
         }
 
+        /**
+         * Costruttore di ListIterator dato il vettore e l'indice da cui partire
+         * 
+         * @param v
+         * @param index
+         */
         public ListIterator(Vector<Object> v, int index){
             super(v,index);
             prev = false;
@@ -109,8 +119,6 @@ public class ListAdapter implements HList {
 
         @Override
         public Object next(){
-            if(!hasNext())
-                throw new NoSuchElementException();
             next = true;
             prev = false;
             return super.next();
@@ -162,7 +170,175 @@ public class ListAdapter implements HList {
         }
     }
 
-    private class SubList {
+    private class SubList implements HList{
+        /**
+         *  Lista
+         */
+        private ListAdapter list;
+        /**
+         *  Indica l'indice più basso
+         */
+        private int from;
+
+        /**
+         * Indica l'indice più alto
+         */
+        private int to;
+
+        /**
+         * Costruttore a partire dagli indici
+         * 
+         * @param f
+         * @param t
+         */
+        public SubList(ListAdapter l,int f, int t){
+            if(f < 0 || t >= list.size())
+                throw new IllegalArgumentException();
+            list = l;
+            from = f;
+            to = t;
+        }
+
+        @Override
+        public void add(int index, Object element) {
+            // TODO Auto-generated method stub
+            
+        }
+
+        @Override
+        public boolean add(Object o) {
+            // TODO Auto-generated method stub
+            return false;
+        }
+
+        @Override
+        public boolean addAll(HCollection c) {
+            // TODO Auto-generated method stub
+            return false;
+        }
+
+        @Override
+        public boolean addAll(int index, HCollection c) {
+            // TODO Auto-generated method stub
+            return false;
+        }
+
+        @Override
+        public void clear() {
+            // TODO Auto-generated method stub
+            
+        }
+
+        @Override
+        public boolean contains(Object o) {
+            // TODO Auto-generated method stub
+            return false;
+        }
+
+        @Override
+        public boolean containsAll(HCollection c) {
+            // TODO Auto-generated method stub
+            return false;
+        }
+
+        @Override
+        public Object get(int index) {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
+        @Override
+        public int indexOf(Object o) {
+            // TODO Auto-generated method stub
+            return 0;
+        }
+
+        @Override
+        public boolean isEmpty() {
+            // TODO Auto-generated method stub
+            return false;
+        }
+
+        @Override
+        public HIterator iterator() {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
+        @Override
+        public int lastIndexOf(Object o) {
+            // TODO Auto-generated method stub
+            return 0;
+        }
+
+        @Override
+        public HListIterator listIterator() {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
+        @Override
+        public HListIterator listIterator(int index) {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
+        @Override
+        public Object remove(int index) {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
+        @Override
+        public boolean remove(Object o) {
+            // TODO Auto-generated method stub
+            return false;
+        }
+
+        @Override
+        public boolean removeAll(HCollection c) {
+            // TODO Auto-generated method stub
+            return false;
+        }
+
+        @Override
+        public boolean retainAll(HCollection c) {
+            // TODO Auto-generated method stub
+            return false;
+        }
+
+        @Override
+        public Object set(int index, Object element) {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
+        @Override
+        public int size() {
+            // TODO Auto-generated method stub
+            return 0;
+        }
+
+        @Override
+        public HList subList(int fromIndex, int toIndex) {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
+        @Override
+        public Object[] toArray() {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
+        @Override
+        public Object[] toArray(Object[] a) {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
+
+
 
     }
 
@@ -215,15 +391,27 @@ public class ListAdapter implements HList {
 
     @Override
     public boolean containsAll(HCollection c) {
-        // TODO Auto-generated method stub
-        return false;
+        if(c == null)
+            throw new NullPointerException();
+        HIterator iter = c.iterator();
+        while(iter.hasNext())
+            if(!vector.contains(iter.next()))
+                return false;
+        return true;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (o == null)
+        if(this.getClass().isInstance(o))
             return false;
-
+        ListAdapter tmp = (ListAdapter) o;
+        if(tmp.size() != size())
+            return false;
+        HIterator iter = tmp.iterator();
+        HIterator itera = iterator();
+        while(itera.hasNext())
+            if(!itera.next().equals(iter.next()))
+            return false;
         return true;
     }
 
@@ -252,8 +440,7 @@ public class ListAdapter implements HList {
 
     @Override
     public HIterator iterator() {
-        // TODO Auto-generated method stub
-        return null;
+        return new Iterator(vector);
     }
 
     @Override
@@ -265,14 +452,14 @@ public class ListAdapter implements HList {
 
     @Override
     public HListIterator listIterator() {
-        // TODO Auto-generated method stub
-        return null;
+        return new ListIterator(vector);
     }
 
     @Override
     public HListIterator listIterator(int index) {
-        // TODO Auto-generated method stub
-        return null;
+        if (index < 0 || index > vector.size())
+            throw new IndexOutOfBoundsException();
+        return new ListIterator(vector, index);
     }
 
     @Override
@@ -293,14 +480,23 @@ public class ListAdapter implements HList {
 
     @Override
     public boolean removeAll(HCollection c) {
-        // TODO Auto-generated method stub
-        return false;
+        if(c == null)
+            throw new NullPointerException();
+        HIterator iter = c.iterator();
+        while(iter.hasNext())
+            remove(iter.next());
+        return true;
     }
 
     @Override
     public boolean retainAll(HCollection c) {
-        // TODO Auto-generated method stub
-        return false;
+        if(c == null)
+            throw new NullPointerException();
+        HIterator iter = iterator();
+        while(iter.hasNext())
+            if(!c.contains(iter.next()))
+                remove(iter);
+        return true;
     }
 
     @Override
