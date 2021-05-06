@@ -443,7 +443,7 @@ public class ListAdapter implements HList {
 
         @Override
         public boolean equals(Object o) {
-            if (this.getClass().isInstance(o))
+            if (!(this.getClass().isInstance(o)))
                 return false;
             SubList tmp = (SubList) o;
             if (tmp.size() != size())
@@ -670,7 +670,7 @@ public class ListAdapter implements HList {
 
     @Override
     public boolean equals(Object o) {
-        if (this.getClass().isInstance(o))
+        if (!(this.getClass().isInstance(o)))
             return false;
         ListAdapter tmp = (ListAdapter) o;
         if (tmp.size() != size())
