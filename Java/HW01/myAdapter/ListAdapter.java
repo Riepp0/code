@@ -16,6 +16,7 @@ package myAdapter;
 import java.util.NoSuchElementException;
 import java.util.Vector;
 
+
 public class ListAdapter implements HList {
     /**
      * SOTTOCLASSI:
@@ -31,7 +32,7 @@ public class ListAdapter implements HList {
      */
     private class Iterator implements HIterator {
 
-        protected Vector<Object> v;
+        protected Vector v;
 
         /**
          * Indice della posizione dell'iteratore
@@ -187,7 +188,7 @@ public class ListAdapter implements HList {
     private class SubList extends ListAdapter {
         private class SubListIterator implements HIterator {
 
-            protected Vector<Object> v;
+            protected Vector v;
 
             /**
              * Indice della posizione dell'iteratore
@@ -600,7 +601,14 @@ public class ListAdapter implements HList {
     /**
      * Vettore con cui realizzo la lista
      */
-    private Vector<Object> vector;
+    private Vector vector;
+
+    /**
+     * Costruttore ListAdapter
+     */
+    public ListAdapter(){
+        vector = new Vector();
+    }
 
     public void add(int index, Object element) {
         if (element == null)

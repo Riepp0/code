@@ -1,172 +1,142 @@
+/**
+ * @author Rieppi Michele 1218669
+ */
+
+/**
+ * STRUTTURA:
+ * MapAdapter[HMap]:{ MyCollection[HCollection]
+ *                  { MySet(MyCollection)[HSet]
+ *                  { MyEntry(HEntry)
+ *                                           
+ */
 package myAdapter;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
 
 public class MapAdapter implements HMap {
+    /**
+     * SOTTOCLASSI:
+     * 
+     * 
+     * 
+     */
+    private class MyCollection implements HCollection {
 
-    private class MySet implements HSet {
+        public ListAdapter list;
+
+        public MyCollection() {
+            list = new ListAdapter();
+        }
 
         @Override
         public boolean add(Object o) {
-            // TODO Auto-generated method stub
-            return false;
+            return list.add(o);
         }
 
         @Override
         public boolean addAll(HCollection c) {
-            // TODO Auto-generated method stub
-            return false;
+            return list.addAll(c);
         }
 
         @Override
         public void clear() {
-            // TODO Auto-generated method stub
-
+            list.clear();
         }
 
         @Override
         public boolean contains(Object o) {
-            // TODO Auto-generated method stub
-            return false;
+            return list.contains(o);
         }
 
         @Override
         public boolean containsAll(HCollection c) {
-            // TODO Auto-generated method stub
-            return false;
+            return list.containsAll(c);
+        }
+
+        public boolean equals(Object o) {
+            if (!(this.getClass().isInstance(o)))
+                return false;
+            ListAdapter tmp = (ListAdapter) o;
+            if (tmp.size() != size())
+                return false;
+            HIterator iter = tmp.iterator();
+            HIterator itera = iterator();
+            while (itera.hasNext())
+                if (!itera.next().equals(iter.next()))
+                    return false;
+            return true;
+        }
+
+        @Override
+        public int hashCode() {
+            return list.hashCode();
         }
 
         @Override
         public boolean isEmpty() {
-            // TODO Auto-generated method stub
-            return false;
+            return list.isEmpty();
         }
 
         @Override
         public HIterator iterator() {
-            // TODO Auto-generated method stub
-            return null;
+            return list.iterator();
         }
 
         @Override
         public boolean remove(Object o) {
-            // TODO Auto-generated method stub
-            return false;
+            return list.remove(o);
         }
 
         @Override
         public boolean removeAll(HCollection c) {
-            // TODO Auto-generated method stub
-            return false;
+            return list.removeAll(c);
         }
 
         @Override
         public boolean retainAll(HCollection c) {
-            // TODO Auto-generated method stub
-            return false;
+            return list.retainAll(c);
         }
 
         @Override
         public int size() {
-            // TODO Auto-generated method stub
-            return 0;
+            return list.size();
         }
 
         @Override
         public Object[] toArray() {
-            // TODO Auto-generated method stub
-            return null;
+            return list.toArray();
         }
 
         @Override
         public Object[] toArray(Object[] a) {
-            // TODO Auto-generated method stub
-            return null;
+            return list.toArray(a);
         }
 
     }
 
-    private class MyCollection implements HCollection {
+    private class MySet extends MyCollection implements HSet {
+
+        public MySet() {
+            super();
+        }
 
         @Override
         public boolean add(Object o) {
-            // TODO Auto-generated method stub
-            return false;
+            if (list.contains(o))
+                return false;
+            return list.add(o);
         }
 
         @Override
         public boolean addAll(HCollection c) {
-            // TODO Auto-generated method stub
-            return false;
+            if (c == null)
+                throw new NullPointerException();
+            HIterator iter = c.iterator();
+            while (iter.hasNext())
+                add(iter.next());
+            return true;
         }
-
-        @Override
-        public void clear() {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public boolean contains(Object o) {
-            // TODO Auto-generated method stub
-            return false;
-        }
-
-        @Override
-        public boolean containsAll(HCollection c) {
-            // TODO Auto-generated method stub
-            return false;
-        }
-
-        @Override
-        public boolean isEmpty() {
-            // TODO Auto-generated method stub
-            return false;
-        }
-
-        @Override
-        public HIterator iterator() {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        @Override
-        public boolean remove(Object o) {
-            // TODO Auto-generated method stub
-            return false;
-        }
-
-        @Override
-        public boolean removeAll(HCollection c) {
-            // TODO Auto-generated method stub
-            return false;
-        }
-
-        @Override
-        public boolean retainAll(HCollection c) {
-            // TODO Auto-generated method stub
-            return false;
-        }
-
-        @Override
-        public int size() {
-            // TODO Auto-generated method stub
-            return 0;
-        }
-
-        @Override
-        public Object[] toArray() {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        @Override
-        public Object[] toArray(Object[] a) {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
     }
 
     private class MyEntry implements HEntry {
@@ -184,7 +154,7 @@ public class MapAdapter implements HMap {
                 return false;
             MyEntry tmp = (MyEntry) o;
             return (getKey() == null ? tmp.getKey() == null : getKey().equals(tmp.getKey()))
-             && (getValue() == null ? tmp.getValue() == null : getValue().equals(tmp.getValue()));
+                    && (getValue() == null ? tmp.getValue() == null : getValue().equals(tmp.getValue()));
         }
 
         @Override
@@ -199,18 +169,25 @@ public class MapAdapter implements HMap {
 
         @Override
         public int hashCode() {
-            return (getKey()==null ? 0 : getKey().hashCode()) ^ (getValue()==null ? 0 : getValue().hashCode());
+            return (getKey() == null ? 0 : getKey().hashCode()) ^ (getValue() == null ? 0 : getValue().hashCode());
         }
 
         @Override
         public Object setValue(Object value) {
-            // TODO Auto-generated method stub
-            return null;
+            if (value == null)
+                throw new NullPointerException();
+            Object ret = this.value;
+            this.value = value;
+            return ret;
         }
 
     }
 
-    Hashtable<Object, Object> hash;
+    Hashtable hash;
+
+    public MapAdapter() {
+        hash = new Hashtable();
+    }
 
     @Override
     public void clear() {
@@ -240,7 +217,6 @@ public class MapAdapter implements HMap {
             ret.add(new MyEntry(tmpkey, get(tmpkey)));
         }
         return ret;
-
     }
 
     @Override
@@ -276,7 +252,7 @@ public class MapAdapter implements HMap {
     @Override
     public HSet keySet() {
         HSet ret = new MySet();
-        Enumeration<Object> enu = hash.keys();
+        Enumeration enu = hash.keys();
         while (enu.hasMoreElements())
             ret.add(enu.nextElement());
         return ret;
@@ -316,7 +292,7 @@ public class MapAdapter implements HMap {
     @Override
     public HCollection values() {
         HCollection ret = new MyCollection();
-        Enumeration<Object> enu = hash.keys();
+        Enumeration enu = hash.keys();
         while (enu.hasMoreElements())
             ret.add(enu.nextElement());
         return ret;
