@@ -601,7 +601,7 @@ public class ListAdapter implements HList {
     /**
      * Vettore con cui realizzo la lista
      */
-    private Vector vector;
+    protected Vector vector;
 
     /**
      * Costruttore ListAdapter

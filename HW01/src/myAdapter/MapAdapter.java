@@ -21,122 +21,164 @@ public class MapAdapter implements HMap {
      * 
      * 
      */
-    private class MyCollection implements HCollection {
+    private class MySet implements HSet {
 
-        public ListAdapter list;
+        private class Iterator implements HIterator {
 
-        public MyCollection() {
-            list = new ListAdapter();
+            protected MapAdapter v;
+            private Enumeration keys;
+            private Object last;
+    
+            /**
+             * Costruttore di Iterator partendo dall'indice del vettore
+             * 
+             * @param index
+             */
+            public Iterator() {
+                
+            }
+    
+            /**
+             * Costruttore di Iterator
+             *
+             */
+            public Iterator() {
+                this(0);
+            }
+    
+            @Override
+            public boolean hasNext() {
+                return index < v.size() - 1;
+            }
+    
+            @Override
+            public Object next() {
+                if (index >= v.size())
+                    throw new NoSuchElementException();
+                next = true;
+                return v.elementAt(index++);
+            }
+    
+            @Override
+            public void remove() {
+                if (!next)
+                    throw new IllegalStateException();
+                next = false;
+                v.removeElement(--index);
+    
+            }
+    
+        }
+    
+        protected MapAdapter map;
+        private final int type;
+
+        public MySet(MapAdapter m, int t){
+            if(t < 1 || t > 3)
+                throw new IllegalArgumentException();
+            map = m;
+            type = t;
         }
 
         @Override
         public boolean add(Object o) {
-            return list.add(o);
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public boolean addAll(HCollection c) {
-            return list.addAll(c);
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void clear() {
-            list.clear();
+            map.clear();
+            
         }
 
         @Override
         public boolean contains(Object o) {
-            return list.contains(o);
+            switch (type) {
+                case 1: 
+                    if(this.getClass().isInstance(o)) // Entryset
+                        return false;
+                    MyEntry tmp = (MyEntry) o;
+                    return map.containsKey(tmp.getKey()) && map.get(tmp.getKey().equals(tmp.getValue());
+
+                case 2: return map.containsKey(o); // KeySet
+
+                case 3: return map.containsValue(o);// ValueSet
+                                
+            }
         }
 
         @Override
         public boolean containsAll(HCollection c) {
-            return list.containsAll(c);
-        }
-
-        public boolean equals(Object o) {
-            if (!(this.getClass().isInstance(o)))
-                return false;
-            ListAdapter tmp = (ListAdapter) o;
-            if (tmp.size() != size())
-                return false;
-            HIterator iter = tmp.iterator();
-            HIterator itera = iterator();
-            while (itera.hasNext())
-                if (!itera.next().equals(iter.next()))
-                    return false;
-            return true;
+            // TODO Auto-generated method stub
+            return false;
         }
 
         @Override
-        public int hashCode() {
-            return list.hashCode();
+        public boolean equals(Object o){
+            // TODO Auto-generated method stub
+            return false;
+        }
+
+        @Override
+        public int hashCode(){
+            // TODO Auto-generated method stub
+            return 0;
         }
 
         @Override
         public boolean isEmpty() {
-            return list.isEmpty();
+            // TODO Auto-generated method stub
+            return false;
         }
 
         @Override
         public HIterator iterator() {
-            return list.iterator();
+            // TODO Auto-generated method stub
+            return null;
         }
 
         @Override
         public boolean remove(Object o) {
-            return list.remove(o);
+            // TODO Auto-generated method stub
+            return false;
         }
 
         @Override
         public boolean removeAll(HCollection c) {
-            return list.removeAll(c);
+            // TODO Auto-generated method stub
+            return false;
         }
 
         @Override
         public boolean retainAll(HCollection c) {
-            return list.retainAll(c);
+            // TODO Auto-generated method stub
+            return false;
         }
 
         @Override
         public int size() {
-            return list.size();
+            // TODO Auto-generated method stub
+            return 0;
         }
 
         @Override
         public Object[] toArray() {
-            return list.toArray();
+            // TODO Auto-generated method stub
+            return null;
         }
 
         @Override
         public Object[] toArray(Object[] a) {
-            return list.toArray(a);
+            // TODO Auto-generated method stub
+            return null;
         }
 
-    }
-
-    private class MySet extends MyCollection implements HSet {
-
-        public MySet() {
-            super();
-        }
-
-        @Override
-        public boolean add(Object o) {
-            if (list.contains(o))
-                return false;
-            return list.add(o);
-        }
-
-        @Override
-        public boolean addAll(HCollection c) {
-            if (c == null)
-                throw new NullPointerException();
-            HIterator iter = c.iterator();
-            while (iter.hasNext())
-                add(iter.next());
-            return true;
-        }
+        
     }
 
     private class MyEntry implements HEntry {
@@ -291,7 +333,7 @@ public class MapAdapter implements HMap {
 
     @Override
     public HCollection values() {
-        HCollection ret = new MyCollection();
+        HCollection ret = new MySet(this);
         Enumeration enu = hash.keys();
         while (enu.hasMoreElements())
             ret.add(enu.nextElement());
