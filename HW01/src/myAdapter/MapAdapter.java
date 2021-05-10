@@ -11,6 +11,7 @@
  */
 package myAdapter;
 
+import java.util.Enumeration;
 import java.util.Hashtable;
 
 public class MapAdapter implements HMap {
@@ -19,27 +20,31 @@ public class MapAdapter implements HMap {
      * 
      * 
      * 
+     * 
      */
-
     private class EntrySet implements HSet {
         private class Iterator implements HIterator {
 
+            protected HIterator ksi;
+
+            public Iterator() {
+                ksi = map.keySet().iterator();
+            }
+
             @Override
             public boolean hasNext() {
-                // TODO Auto-generated method stub
-                return false;
+                return ksi.hasNext();
             }
 
             @Override
             public Object next() {
-                // TODO Auto-generated method stub
-                return null;
+                Object k = ksi.next();
+                return new MyEntry(k, map.get(k), map);
             }
 
             @Override
             public void remove() {
-                // TODO Auto-generated method stub
-
+                ksi.remove();
             }
 
         }
@@ -152,9 +157,9 @@ public class MapAdapter implements HMap {
             HIterator iter = iterator();
             boolean ret = false;
             while (iter.hasNext()) {
-                Object e = iter.next();
-                if (!c.contains(e)) {
-                    remove(e);
+                Object o = iter.next();
+                if (!c.contains(o)) {
+                    remove(o);
                     ret = true;
                 }
             }
@@ -192,23 +197,29 @@ public class MapAdapter implements HMap {
 
     private class KeySet implements HSet {
         private class Iterator implements HIterator {
+            protected Object lastkey;
+            protected Enumeration k;
+
+            public Iterator() {
+                lastkey = null;
+                k = map.hash.keys();
+            }
 
             @Override
             public boolean hasNext() {
-                // TODO Auto-generated method stub
-                return false;
+                return k.hasMoreElements();
             }
 
             @Override
             public Object next() {
-                // TODO Auto-generated method stub
-                return null;
+                lastkey = k.nextElement();
+                return lastkey;
             }
 
             @Override
             public void remove() {
-                // TODO Auto-generated method stub
-
+                map.remove(lastkey);
+                k = map.hash.keys();
             }
 
         }
@@ -312,9 +323,9 @@ public class MapAdapter implements HMap {
             HIterator iter = iterator();
             boolean ret = false;
             while (iter.hasNext()) {
-                Object e = iter.next();
-                if (!c.contains(e)) {
-                    remove(e);
+                Object o = iter.next();
+                if (!c.contains(o)) {
+                    remove(o);
                     ret = true;
                 }
             }
@@ -351,22 +362,36 @@ public class MapAdapter implements HMap {
     private class ValueCollection implements HCollection {
         private class Iterator implements HIterator {
 
+            protected Object lastvalue;
+            protected Enumeration v;
+
+            public Iterator() {
+                lastvalue = null;
+                v = map.hash.elements();
+            }
+
             @Override
             public boolean hasNext() {
-                // TODO Auto-generated method stub
-                return false;
+                return v.hasMoreElements();
             }
 
             @Override
             public Object next() {
-                // TODO Auto-generated method stub
-                return null;
+                lastvalue = v.nextElement();
+                return lastvalue;
             }
 
             @Override
             public void remove() {
-                // TODO Auto-generated method stub
-
+                HSet ks = map.keySet();
+                HIterator iter = ks.iterator();
+                while (iter.hasNext()) {
+                    Object k = iter.next();
+                    if (map.get(k).equals(lastvalue)) {
+                        map.remove(k);
+                        return;
+                    }
+                }
             }
 
         }
@@ -478,9 +503,9 @@ public class MapAdapter implements HMap {
             HIterator iter = iterator();
             boolean ret = false;
             while (iter.hasNext()) {
-                Object e = iter.next();
-                if (!c.contains(e)) {
-                    remove(e);
+                Object o = iter.next();
+                if (!c.contains(o)) {
+                    remove(o);
                     ret = true;
                 }
             }
