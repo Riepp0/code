@@ -37,5 +37,7 @@ public class ListTest {
     public void lt01_addAll() {
         // Creating empty ListAdapter
         ListAdapter l = new ListAdapter();
+
+        //Initializing objects
     }
 }
