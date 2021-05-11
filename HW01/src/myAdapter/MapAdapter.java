@@ -4,9 +4,10 @@
 
 /**
  * STRUTTURA:
- * MapAdapter[HMap]:{ MyCollection[HCollection]
- *                  { MySet(MyCollection)[HSet]
- *                  { MyEntry(HEntry)
+ * MapAdapter[HMap]:{ EntrySet[HSet]              :{ Iterator[HIterator]
+ *                  { KeySet[HSet]                :{ Iterator[HIterator]
+ *                  { ValueCollection[HCollection]:{ Iterator[HIterator]
+ *                  { MyEntry[HEntry]
  *                                           
  */
 package myAdapter;
@@ -15,13 +16,6 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 
 public class MapAdapter implements HMap {
-    /**
-     * SOTTOCLASSI:
-     * 
-     * 
-     * 
-     * 
-     */
     private class EntrySet implements HSet {
         private class Iterator implements HIterator {
 
