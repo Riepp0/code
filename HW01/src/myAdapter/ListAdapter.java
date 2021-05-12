@@ -154,7 +154,7 @@ public class ListAdapter implements HList {
             }
 
             public SubListIterator() {
-                this(ListAdapter.SubList.this.from);
+                this(0);
             }
 
             @Override
@@ -189,7 +189,7 @@ public class ListAdapter implements HList {
             }
 
             public SubListListIterator() {
-                this(from);
+                this(0);
             }
 
             @Override
@@ -455,7 +455,7 @@ public class ListAdapter implements HList {
             HIterator iter = c.iterator();
             while (iter.hasNext()) {
                 Object rem = iter.next();
-                while (contains(rem))
+                if (contains(rem))
                     remove(rem);
             }
             return old != size();
