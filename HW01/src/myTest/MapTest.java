@@ -57,7 +57,7 @@ public class MapTest {
     @Test
     public void map_containsValue() {
         m.put(k01, v01);
-        assertTrue("Errore : la mappa non contiene la chiave", m.containsValue(v01));
+        assertTrue("Errore : la mappa non contiene il valore", m.containsValue(v01));
     }
 
     @Test
