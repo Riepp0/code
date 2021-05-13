@@ -16,37 +16,45 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 
 public class MapAdapter implements HMap {
+
     private class EntrySet implements HSet {
         private class Iterator implements HIterator {
 
-            protected HIterator ksi;
+            protected Object last;
+            protected Enumeration k;
+            protected boolean next;
 
             public Iterator() {
-                ksi = map.keySet().iterator();
+                last = null;
+                k = MapAdapter.this.hash.keys();
             }
 
             @Override
             public boolean hasNext() {
-                return ksi.hasNext();
+                return k.hasMoreElements();
             }
 
             @Override
             public Object next() {
-                Object k = ksi.next();
-                return new MyEntry(k, map.get(k), map);
+                last = k.nextElement();
+                next = true;
+                return new MyEntry(last, MapAdapter.this.get(last));
             }
 
             @Override
             public void remove() {
-                ksi.remove();
+                if (!next)
+                    throw new IllegalStateException();
+                MapAdapter.this.remove(last);
+                next = false;
             }
 
         }
 
         protected MapAdapter map;
 
-        public EntrySet(MapAdapter m) {
-            map = m;
+        public EntrySet() {
+            map = MapAdapter.this;
         }
 
         @Override
@@ -66,19 +74,17 @@ public class MapAdapter implements HMap {
 
         @Override
         public boolean contains(Object o) {
-            if (!MyEntry.class.isInstance(o)) 
+            if (o == null)
+                throw new NullPointerException();
+            if (!(o instanceof HEntry))
                 return false;
-            MyEntry entry = (MyEntry) o;
-            if (!map.containsKey(entry.getKey())) 
-                return false;
-            if (!map.get(entry.getKey()).equals(entry.getValue())) 
-                return false;
-            return true;
+            HEntry he = (HEntry) o;
+            return map.containsKey(he.getKey()) && map.get(he.getKey()).equals(he.getValue());
         }
 
         @Override
         public boolean containsAll(HCollection c) {
-            if (c == null) 
+            if (c == null)
                 throw new NullPointerException();
             HIterator iter = c.iterator();
             while (iter.hasNext()) {
@@ -90,12 +96,12 @@ public class MapAdapter implements HMap {
 
         @Override
         public boolean equals(Object o) {
-            if (!HSet.class.isInstance(o))
+            if (!(o instanceof HSet))
                 return false;
-            HSet set = (HSet) o;
-            if (size() != set.size())
+            HSet hs = (HSet) o;
+            if (size() != hs.size())
                 return false;
-            if (!containsAll(set))
+            if (!containsAll(hs))
                 return false;
             return true;
         }
@@ -121,11 +127,13 @@ public class MapAdapter implements HMap {
 
         @Override
         public boolean remove(Object o) {
-            if (!MyEntry.class.isInstance(o))
+            if (o == null)
+                throw new NullPointerException();
+            if (!(o instanceof HEntry))
                 return false;
-            MyEntry entry = (MyEntry) o;
-            if (contains(entry.getKey())) {
-                map.remove(entry.getKey());
+            HEntry he = (HEntry) o;
+            if (contains(he)) {
+                map.remove(he.getKey());
                 return true;
             }
             return false;
@@ -136,12 +144,10 @@ public class MapAdapter implements HMap {
             if (c == null)
                 throw new NullPointerException();
             HIterator iter = c.iterator();
-            boolean ret = false;
-            while (iter.hasNext()) {
-                if (remove(iter.next()))
-                    ret = true;
-            }
-            return ret;
+            int old = size();
+            while (iter.hasNext())
+                remove(iter.next());
+            return old != size();
         }
 
         @Override
@@ -149,15 +155,13 @@ public class MapAdapter implements HMap {
             if (c == null)
                 throw new NullPointerException();
             HIterator iter = iterator();
-            boolean ret = false;
+            int old = size();
             while (iter.hasNext()) {
-                Object o = iter.next();
-                if (!c.contains(o)) {
-                    remove(o);
-                    ret = true;
-                }
+                Object he = iter.next();
+                if (!c.contains(he))
+                    remove(he);
             }
-            return ret;
+            return old != size();
         }
 
         @Override
@@ -170,20 +174,20 @@ public class MapAdapter implements HMap {
             Object[] a = new Object[map.size()];
             HIterator iter = iterator();
             for (int i = 0; i < a.length; i++) {
-                MyEntry entry = (MyEntry) iter.next();
-                a[i] = new MyEntry(entry.getKey(), entry.getValue(), map);
+                a[i] = iter.next();
             }
             return a;
         }
 
         @Override
         public Object[] toArray(Object[] a) {
+            if (a == null)
+                throw new NullPointerException();
             if (a.length < map.size())
                 a = new Object[map.size()];
             HIterator iter = iterator();
             for (int i = 0; i < a.length; i++) {
-                MyEntry entry = (MyEntry) iter.next();
-                a[i] = new MyEntry(entry.getKey(), entry.getValue(), map);
+                a[i] = iter.next();
             }
             return a;
         }
@@ -191,12 +195,15 @@ public class MapAdapter implements HMap {
 
     private class KeySet implements HSet {
         private class Iterator implements HIterator {
-            protected Object lastkey;
+
+            protected Object last;
             protected Enumeration k;
+            protected boolean next;
 
             public Iterator() {
-                lastkey = null;
-                k = map.hash.keys();
+                last = null;
+                k = MapAdapter.this.hash.keys();
+                next = false;
             }
 
             @Override
@@ -206,22 +213,25 @@ public class MapAdapter implements HMap {
 
             @Override
             public Object next() {
-                lastkey = k.nextElement();
-                return lastkey;
+                last = k.nextElement();
+                next = true;
+                return last;
             }
 
             @Override
             public void remove() {
-                map.remove(lastkey);
-                k = map.hash.keys();
+                if (!next)
+                    throw new IllegalStateException();
+                MapAdapter.this.remove(last);
+                next = false;
             }
 
         }
 
         protected MapAdapter map;
 
-        public KeySet(MapAdapter m) {
-            map = m;
+        public KeySet() {
+            map = MapAdapter.this;
         }
 
         @Override
@@ -258,23 +268,20 @@ public class MapAdapter implements HMap {
 
         @Override
         public boolean equals(Object o) {
-            if (!HSet.class.isInstance(o))
+            if (!(o instanceof HSet))
                 return false;
-            HSet set = (HSet) o;
-            if (size() != set.size())
+            HSet hs = (HSet) o;
+            if (size() != hs.size())
                 return false;
-            if (!containsAll(set))
-                return false;
-            return true;
+            return containsAll(hs);
         }
 
         @Override
         public int hashCode() {
             HIterator iter = iterator();
             int h = 0;
-            while (iter.hasNext()) {
+            while (iter.hasNext())
                 h += iter.next().hashCode();
-            }
             return h;
         }
 
@@ -302,12 +309,10 @@ public class MapAdapter implements HMap {
             if (c == null)
                 throw new NullPointerException();
             HIterator iter = c.iterator();
-            boolean ret = false;
-            while (iter.hasNext()) {
-                if (remove(iter.next()))
-                    ret = true;
-            }
-            return ret;
+            int old = size();
+            while (iter.hasNext())
+                remove(iter.next());
+            return old != size();
         }
 
         @Override
@@ -315,15 +320,13 @@ public class MapAdapter implements HMap {
             if (c == null)
                 throw new NullPointerException();
             HIterator iter = iterator();
-            boolean ret = false;
+            int old = size();
             while (iter.hasNext()) {
-                Object o = iter.next();
-                if (!c.contains(o)) {
-                    remove(o);
-                    ret = true;
-                }
+                Object he = iter.next();
+                if (!c.contains(he))
+                    remove(he);
             }
-            return ret;
+            return old != size();
         }
 
         @Override
@@ -343,6 +346,8 @@ public class MapAdapter implements HMap {
 
         @Override
         public Object[] toArray(Object[] a) {
+            if (a == null)
+                throw new NullPointerException();
             if (a.length < map.size())
                 a = new Object[map.size()];
             HIterator iter = iterator();
@@ -356,44 +361,42 @@ public class MapAdapter implements HMap {
     private class ValueCollection implements HCollection {
         private class Iterator implements HIterator {
 
-            protected Object lastvalue;
-            protected Enumeration v;
+            protected Object last;
+            protected Enumeration k;
+            protected boolean next;
 
             public Iterator() {
-                lastvalue = null;
-                v = map.hash.elements();
+                last = null;
+                k = MapAdapter.this.hash.elements();
+                next = false;
             }
 
             @Override
             public boolean hasNext() {
-                return v.hasMoreElements();
+                return k.hasMoreElements();
             }
 
             @Override
             public Object next() {
-                lastvalue = v.nextElement();
-                return lastvalue;
+                last = k.nextElement();
+                next = true;
+                return MapAdapter.this.get(last);
             }
 
             @Override
             public void remove() {
-                HSet ks = map.keySet();
-                HIterator iter = ks.iterator();
-                while (iter.hasNext()) {
-                    Object k = iter.next();
-                    if (map.get(k).equals(lastvalue)) {
-                        map.remove(k);
-                        return;
-                    }
-                }
+                if (!next)
+                    throw new IllegalStateException();
+                MapAdapter.this.remove(last);
+                next = false;
             }
 
         }
 
         protected MapAdapter map;
 
-        public ValueCollection(MapAdapter m) {
-            map = m;
+        public ValueCollection() {
+            map = MapAdapter.this;
         }
 
         @Override
@@ -430,23 +433,20 @@ public class MapAdapter implements HMap {
 
         @Override
         public boolean equals(Object o) {
-            if (!HSet.class.isInstance(o))
+            if (!(o instanceof HCollection))
                 return false;
-            HSet set = (HSet) o;
-            if (size() != set.size())
+            HCollection hs = (HCollection) o;
+            if (size() != hs.size())
                 return false;
-            if (!containsAll(set))
-                return false;
-            return true;
+            return containsAll(hs);
         }
 
         @Override
         public int hashCode() {
             HIterator iter = iterator();
             int h = 0;
-            while (iter.hasNext()) {
+            while (iter.hasNext())
                 h += iter.next().hashCode();
-            }
             return h;
         }
 
@@ -478,16 +478,13 @@ public class MapAdapter implements HMap {
 
         @Override
         public boolean removeAll(HCollection c) {
-            if (c == null) {
+            if (c == null)
                 throw new NullPointerException();
-            }
             HIterator iter = c.iterator();
-            boolean ret = false;
-            while (iter.hasNext()) {
-                if (remove(iter.next()))
-                    ret = true;
-            }
-            return ret;
+            int old = size();
+            while (iter.hasNext())
+                remove(iter.next());
+            return old != size();
         }
 
         @Override
@@ -495,15 +492,13 @@ public class MapAdapter implements HMap {
             if (c == null)
                 throw new NullPointerException();
             HIterator iter = iterator();
-            boolean ret = false;
+            int old = size();
             while (iter.hasNext()) {
-                Object o = iter.next();
-                if (!c.contains(o)) {
-                    remove(o);
-                    ret = true;
-                }
+                Object he = iter.next();
+                if (!c.contains(he))
+                    remove(he);
             }
-            return ret;
+            return old != size();
         }
 
         @Override
@@ -523,6 +518,8 @@ public class MapAdapter implements HMap {
 
         @Override
         public Object[] toArray(Object[] a) {
+            if (a == null)
+                throw new NullPointerException();
             if (a.length < map.size())
                 a = new Object[map.size()];
             HIterator iter = iterator();
@@ -534,22 +531,23 @@ public class MapAdapter implements HMap {
     }
 
     private class MyEntry implements HEntry {
-        private MapAdapter map;
-        private Object key, value;
 
-        public MyEntry(Object k, Object v, MapAdapter m) {
+        protected Object key, value;
+        protected MapAdapter map;
+
+        public MyEntry(Object k, Object v) {
             key = k;
             value = v;
-            map = m;
+            map = MapAdapter.this;
         }
 
         @Override
         public boolean equals(Object o) {
-            if (!(this.getClass().isInstance(o)))
+            if (!(o instanceof HEntry))
                 return false;
-            MyEntry tmp = (MyEntry) o;
-            return (getKey() == null ? tmp.getKey() == null : getKey().equals(tmp.getKey()))
-                    && (getValue() == null ? tmp.getValue() == null : getValue().equals(tmp.getValue()));
+            HEntry cmp = (HEntry) o;
+            return (getKey() == null ? cmp.getKey() == null : getKey().equals(cmp.getKey()))
+                    && (getValue() == null ? cmp.getValue() == null : getValue().equals(cmp.getValue()));
         }
 
         @Override
@@ -573,13 +571,12 @@ public class MapAdapter implements HMap {
                 throw new NullPointerException();
             Object ret = this.value;
             this.value = value;
-            map.put(key, value);
+            MapAdapter.this.put(key, value);
             return ret;
         }
-
     }
 
-    Hashtable hash;
+    private Hashtable hash;
 
     public MapAdapter() {
         hash = new Hashtable();
@@ -588,7 +585,6 @@ public class MapAdapter implements HMap {
     @Override
     public void clear() {
         hash.clear();
-
     }
 
     @Override
@@ -605,15 +601,15 @@ public class MapAdapter implements HMap {
 
     @Override
     public HSet entrySet() {
-        return new EntrySet(this);
+        return new EntrySet();
     }
 
     @Override
     public boolean equals(Object o) {
-        if (!(this.getClass().isInstance(o)))
+        if (!(o instanceof HMap))
             return false;
-        MapAdapter tmp = (MapAdapter) o;
-        return entrySet().equals(tmp.entrySet());
+        HMap cmp = (HMap) o;
+        return entrySet().equals(cmp.entrySet());
     }
 
     @Override
@@ -625,12 +621,7 @@ public class MapAdapter implements HMap {
 
     @Override
     public int hashCode() {
-        HSet e = entrySet();
-        HIterator iter = e.iterator();
-        int ret = 0;
-        while (iter.hasNext())
-            ret += iter.next().hashCode();
-        return ret;
+        return entrySet().hashCode();
     }
 
     @Override
@@ -640,7 +631,7 @@ public class MapAdapter implements HMap {
 
     @Override
     public HSet keySet() {
-        return new KeySet(this);
+        return new KeySet();
     }
 
     @Override
@@ -650,16 +641,14 @@ public class MapAdapter implements HMap {
 
     @Override
     public void putAll(HMap t) {
-        if (t == null) {
+        if (t == null)
             throw new NullPointerException();
-        }
         HSet k = t.keySet();
         HIterator iter = k.iterator();
         while (iter.hasNext()) {
-            Object tmpkey = iter.next();
-            put(tmpkey, t.get(tmpkey));
+            Object tempkey = iter.next();
+            put(tempkey, t.get(tempkey));
         }
-
     }
 
     @Override
@@ -676,6 +665,6 @@ public class MapAdapter implements HMap {
 
     @Override
     public HCollection values() {
-        return new ValueCollection(this);
+        return new ValueCollection();
     }
 }
