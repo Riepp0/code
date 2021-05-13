@@ -62,6 +62,39 @@ public class MapTest {
 
     @Test
     public void map_entrySet() {
+        m.put(k01, v01);
+        m.put(k02, v02);
+        m.put(k03, v03);
+        m.put(k04, v04);
+        m.put(k05, v05);
+
+        HSet hs = m.entrySet();
+        HIterator iter = hs.iterator();
+        HMap.HEntry he = (HMap.HEntry) iter.next();
+        assertTrue("Errore : ",m.containsKey(he.getKey()));
+        assertTrue("Errore : ",m.containsValue(he.getValue()));
+
+        Object old = he.getValue();
+        he.setValue(v04);
+        assertEquals(v04, m.get(he.getKey()));
+
+        he = (HMap.HEntry) iter.next();
+        Object oldk = he.getKey();
+        iter.remove();
+        assertFalse("Errore : ", m.containsKey(oldk));
+
+        assertThrows("Errore : ", IllegalStateException.class, () -> iter.remove());
+        assertEquals("Errore : ", 4, m.size());
+
+        HList hl = new ListAdapter();
+        he = (HMap.HEntry) iter.next();
+        hl.add(he);
+        he = (HMap.HEntry) iter.next();
+        hl.add(he);
+        assertTrue(hs.containsAll(hl));
+
+        HSet tmp = m.entrySet();
+        assertTrue(hs.equals(tmp));
 
     }
 
@@ -88,7 +121,7 @@ public class MapTest {
 
     @Test
     public void map_keySet() {
-
+        
     }
 
     @Test

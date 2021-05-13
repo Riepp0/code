@@ -30,17 +30,17 @@ public class ListTest {
     @Test
     public void list_add() {
 
-        assertEquals("Errore : list didn't add, o01", true, l.add(o01));
-        assertEquals("Errore : list didn't add, o03", true, l.add(o03));
+        assertEquals("Errore : non è stato aggiunto, o01", true, l.add(o01));
+        assertEquals("Errore : non è stato aggiunto, o03", true, l.add(o03));
         l.add(1, o02);
 
-        assertEquals("Errore : object first position", o01, l.get(0));
-        assertEquals("Errore : object second position", o02, l.get(1));
-        assertEquals("Errore : object third position", o03, l.get(2));
+        assertEquals("Errore : oggetto nella posizione 0", o01, l.get(0));
+        assertEquals("Errore : oggetto nella posizione 1", o02, l.get(1));
+        assertEquals("Errore : oggetto nella posizione 2", o03, l.get(2));
 
-        assertThrows("Errore : exception 1 not thrown", NullPointerException.class, () -> l.add(null));
-        assertThrows("Errore : exception 2 not thrown", NullPointerException.class, () -> l.add(0, null));
-        assertThrows("Errore : exception 3 not thrown", IndexOutOfBoundsException.class, () -> l.add(-1, new Object()));
+        assertThrows("Errore : eccezione 1 non thrown", NullPointerException.class, () -> l.add(null));
+        assertThrows("Errore : eccezione 2 non thrown", NullPointerException.class, () -> l.add(0, null));
+        assertThrows("Errore : eccezione 3 non thrown", IndexOutOfBoundsException.class, () -> l.add(-1, new Object()));
     }
 
     @Test
@@ -48,41 +48,41 @@ public class ListTest {
         HList c = new ListAdapter();
         c.add(o01);
         c.add(o02);
-        assertTrue("Errore : list didn't add, c", l.addAll(c));
-        assertEquals("Errore : list size is not 2", 2, l.size());
-        assertEquals("Errore : object first position", o01, l.get(0));
-        assertEquals("Errore : object second position", o02, l.get(1));
+        assertTrue("Errore : non aggiunto, c", l.addAll(c));
+        assertEquals("Errore : dimensione non è 2", 2, l.size());
+        assertEquals("Errore : oggetto prima posizione", o01, l.get(0));
+        assertEquals("Errore : oggetto seconda posizione", o02, l.get(1));
 
-        assertTrue("Errore : list didn't add, c", l.addAll(1, c));
-        assertEquals("Errore : object first position", o01, l.get(0));
-        assertEquals("Errore : object second position", o01, l.get(1));
-        assertEquals("Errore : object third position", o02, l.get(2));
-        assertEquals("Errore : object fourth position", o02, l.get(3));
+        assertTrue("Errore : non aggiunto, c", l.addAll(1, c));
+        assertEquals("Errore : oggetto prima posizione", o01, l.get(0));
+        assertEquals("Errore : oggetto seconda posizione", o01, l.get(1));
+        assertEquals("Errore : oggetto terza posizione", o02, l.get(2));
+        assertEquals("Errore : oggetto quarta posizione", o02, l.get(3));
 
-        assertThrows("Errore : exception 1 not thrown", NullPointerException.class, () -> l.addAll(null));
-        assertThrows("Errore : exception 2 not thrown", NullPointerException.class, () -> l.addAll(0, null));
-        assertThrows("Errore : exception 3 not thrown", IndexOutOfBoundsException.class, () -> l.addAll(-1, c));
+        assertThrows("Errore : eccezione 1 not thrown", NullPointerException.class, () -> l.addAll(null));
+        assertThrows("Errore : eccezione 2 not thrown", NullPointerException.class, () -> l.addAll(0, null));
+        assertThrows("Errore : eccezione 3 not thrown", IndexOutOfBoundsException.class, () -> l.addAll(-1, c));
 
         HList n = new ListAdapter();
-        assertFalse("Errore : added", l.addAll(n));
-        assertFalse("Errore : added", l.addAll(1, n));
+        assertFalse("Errore : aggiunto", l.addAll(n));
+        assertFalse("Errore : aggiunto", l.addAll(1, n));
     }
 
     @Test
     public void list_clear() {
         l.add(o01);
         l.clear();
-        assertEquals("Errore : not empty", 0, l.size());
+        assertEquals("Errore : non vuota", 0, l.size());
     }
 
     @Test
     public void list_contains() {
         l.add(o01);
         l.add(o02);
-        assertTrue("Errore : doesn't contain", l.contains(o02));
-        assertFalse("Errore : contains", l.contains(o03));
+        assertTrue("Errore : non contiene", l.contains(o02));
+        assertFalse("Errore : contiene", l.contains(o03));
 
-        assertThrows("Errore : exception not thrown", NullPointerException.class, () -> l.contains(null));
+        assertThrows("Errore : eccezione not thrown", NullPointerException.class, () -> l.contains(null));
     }
 
     @Test
@@ -94,14 +94,14 @@ public class ListTest {
         l.add(o03);
         l.add(o01);
         l.add(o03);
-        assertTrue("Errore : doesn't contain", l.containsAll(c));
+        assertTrue("Errore : non contiene", l.containsAll(c));
 
         Object o04 = new Object();
         HList n = new ListAdapter();
         n.add(o04);
-        assertFalse("Errore : contains", l.containsAll(n));
+        assertFalse("Errore : contiene", l.containsAll(n));
 
-        assertThrows("Errore : exception 1 not thrown", NullPointerException.class, () -> l.containsAll(null));
+        assertThrows("Errore : eccezione 1 not thrown", NullPointerException.class, () -> l.containsAll(null));
     }
 
     @Test
@@ -110,7 +110,7 @@ public class ListTest {
         l.add(o02);
         HList c = new ListAdapter();
         c.addAll(l);
-        assertTrue("Errore : not equals", l.equals(c));
+        assertTrue("Errore : non sono uguali", l.equals(c));
     }
 
     @Test
@@ -118,10 +118,10 @@ public class ListTest {
         l.add(o01);
         l.add(0, o02);
 
-        assertEquals("Errore : wrong position o02", o02, l.get(0));
-        assertEquals("Errore : wrong position o01", o01, l.get(1));
+        assertEquals("Errore : posizione errata o02", o02, l.get(0));
+        assertEquals("Errore : posizione errata o01", o01, l.get(1));
 
-        assertThrows("Errore : exception not thrown", IndexOutOfBoundsException.class, () -> l.get(-1));
+        assertThrows("Errore : eccezione not thrown", IndexOutOfBoundsException.class, () -> l.get(-1));
     }
 
     @Test
@@ -129,16 +129,16 @@ public class ListTest {
         l.add(o01);
         l.add(o02);
 
-        assertEquals("Errore : wrong position o01", 0, l.indexOf(o01));
-        assertEquals("Errore : wrong position o02", 1, l.indexOf(o02));
-        assertEquals("Errore : wrong position o03", -1, l.indexOf(o03));
+        assertEquals("Errore : posizione errata o01", 0, l.indexOf(o01));
+        assertEquals("Errore : posizione errata o02", 1, l.indexOf(o02));
+        assertEquals("Errore : posizione errata o03", -1, l.indexOf(o03));
 
-        assertThrows("Errore : exception not thrown", NullPointerException.class, () -> l.indexOf(null));
+        assertThrows("Errore : eccezoione not thrown", NullPointerException.class, () -> l.indexOf(null));
     }
 
     @Test
     public void list_isEmpty() {
-        assertTrue("Errore : isn't empty", l.isEmpty());
+        assertTrue("Errore : non vuota", l.isEmpty());
     }
 
     @Test
@@ -155,12 +155,12 @@ public class ListTest {
             oa1[i] = iter.next();
         }
 
-        assertArrayEquals("Errore : iteration didn't work", new Object[] { o01, o02, o03, o02, o01 }, oa1);
+        assertArrayEquals("Errore : iteratione non funzionante", new Object[] { o01, o02, o03, o02, o01 }, oa1);
         iter.remove();
-        assertFalse("Errore : this doesn't have next", iter.hasNext());
-        assertEquals("Errore : the size was not 4", 4, l.size());
+        assertFalse("Errore : non c'è un next", iter.hasNext());
+        assertEquals("Errore : la dimensione non è 4", 4, l.size());
 
-        assertThrows("Errore : exception not thrown", IllegalStateException.class, () -> iter.remove());
+        assertThrows("Errore : eccezione not thrown", IllegalStateException.class, () -> iter.remove());
 
     }
 
@@ -171,10 +171,10 @@ public class ListTest {
         l.add(o01);
         l.add(o02);
 
-        assertEquals("Errore : wrong position o01", 2, l.lastIndexOf(o01));
-        assertEquals("Errore : wrong position o01", 3, l.lastIndexOf(o02));
+        assertEquals("Errore : posizione errata o01", 2, l.lastIndexOf(o01));
+        assertEquals("Errore : posizione errata o02", 3, l.lastIndexOf(o02));
 
-        assertThrows("Errore : exception not thrown", NullPointerException.class, () -> l.lastIndexOf(null));
+        assertThrows("Errore : eccezione not thrown", NullPointerException.class, () -> l.lastIndexOf(null));
     }
 
     @Test
@@ -190,15 +190,15 @@ public class ListTest {
         iter.next();
         iter.next();
         iter.add(o01);
-        assertEquals("Errore : the size was not 6", 6, l.size());
-        assertEquals("Errore : didn't get added at index 3", o01, l.get(3));
-        assertTrue("Errore : this has no previous", iter.hasPrevious());
-        assertEquals("Errore : iterator in the wrong position", o01, iter.previous());
+        assertEquals("Errore : la size non è 6", 6, l.size());
+        assertEquals("Errore : non è stato aggiunt all'indice 3", o01, l.get(3));
+        assertTrue("Errore : non c'è precedente", iter.hasPrevious());
+        assertEquals("Errore : iteratore nella posizione sbagliata", o01, iter.previous());
         iter.remove();
-        assertEquals("Errore : the size was not 5", 5, l.size());
+        assertEquals("Errore : la size non è 5", 5, l.size());
         assertEquals("", 2, iter.previousIndex());
         assertEquals("", 3, iter.nextIndex());
-        assertThrows("Errore : exception not thrown", IllegalStateException.class, () -> iter.remove());
+        assertThrows("Errore : eccezione not thrown", IllegalStateException.class, () -> iter.remove());
         assertEquals("", o02, iter.next());
     }
 
@@ -214,20 +214,20 @@ public class ListTest {
         l.add(o02);
         l.add(o03);
 
-        assertEquals("Errore : wrong position o01", o01, l.remove(0));
-        assertEquals("Errore : wrong position o02", o02, l.remove(3));
-        assertEquals("Errore : wrong position o03", o03, l.remove(6));
+        assertEquals("Errore : posizione sbagliata o01", o01, l.remove(0));
+        assertEquals("Errore : posizione sbagliata o02", o02, l.remove(3));
+        assertEquals("Errore : posizione sbagliata o03", o03, l.remove(6));
 
-        assertTrue("Errore : no such element, o01", l.remove(o01));
-        assertTrue("Errore : no such element, o02", l.remove(o02));
-        assertTrue("Errore : no such element, o03", l.remove(o03));
+        assertTrue("Errore : non c'è l'elemento, o01", l.remove(o01));
+        assertTrue("Errore : non c'è l'elemento, o02", l.remove(o02));
+        assertTrue("Errore : non c'è l'elemento, o03", l.remove(o03));
 
         assertEquals("Errore : size check", 3, l.size());
         Object o04 = new Object();
         assertFalse("Errore : o04 was in the list", l.remove(o04));
 
-        assertThrows("Errore : exception 1 not thrown", IndexOutOfBoundsException.class, () -> l.remove(-1));
-        assertThrows("Errore : exception 2 not thrown", NullPointerException.class, () -> l.remove(null));
+        assertThrows("Errore : eccezione 1 not thrown", IndexOutOfBoundsException.class, () -> l.remove(-1));
+        assertThrows("Errore : eccezione 2 not thrown", NullPointerException.class, () -> l.remove(null));
     }
 
     @Test
@@ -241,10 +241,10 @@ public class ListTest {
         l.add(o02);
         l.add(o01);
 
-        assertTrue("Errore : list not modified", l.removeAll(c));
+        assertTrue("Errore : lista non modificata", l.removeAll(c));
         assertEquals("Errore : size check", 3, l.size());
 
-        assertThrows("Errore : exception not thrown", NullPointerException.class, () -> l.removeAll(null));
+        assertThrows("Errore : eccezione not thrown", NullPointerException.class, () -> l.removeAll(null));
     }
 
     @Test
@@ -258,10 +258,10 @@ public class ListTest {
         l.add(o02);
         l.add(o01);
 
-        assertTrue("Errore : list not modified", l.retainAll(c));
+        assertTrue("Errore : lista non modificata", l.retainAll(c));
         assertEquals("Errore : size check", 4, l.size());
 
-        assertThrows("Errore : exception not thrown", NullPointerException.class, () -> l.retainAll(null));
+        assertThrows("Errore : eccezione not thrown", NullPointerException.class, () -> l.retainAll(null));
     }
 
     @Test
@@ -271,11 +271,11 @@ public class ListTest {
         l.add(o03);
         l.add(o03);
 
-        assertEquals("Errore : replaced wrong one", o03, l.set(2, o02));
-        assertEquals("Errore : o02 not replaced correctly", o02, l.get(2));
+        assertEquals("Errore : rimpiazzato quello sbagliato", o03, l.set(2, o02));
+        assertEquals("Errore : o02 non correttamente rimpiazzato", o02, l.get(2));
 
-        assertThrows("Errore : exception 1 not thrown", NullPointerException.class, () -> l.set(1, null));
-        assertThrows("Errore : exception 2 not thrown", IndexOutOfBoundsException.class, () -> l.set(-1, o01));
+        assertThrows("Errore : eccezione 1 not thrown", NullPointerException.class, () -> l.set(1, null));
+        assertThrows("Errore : eccezione 2 not thrown", IndexOutOfBoundsException.class, () -> l.set(-1, o01));
     }
 
     @Test
@@ -284,7 +284,7 @@ public class ListTest {
         l.add(o02);
         l.add(o03);
 
-        assertEquals("Failed: wrong size calculation", 3, l.size());
+        assertEquals("Failed: calcolo size sbagliato", 3, l.size());
     }
 
     @Test
@@ -324,13 +324,13 @@ public class ListTest {
         assertEquals("Errore : sub didn't add, o03", true, sub.add(o03));
         sub.add(1, o02);
 
-        assertEquals("Errore : object first position", o01, sub.get(0));
-        assertEquals("Errore : object second position", o02, sub.get(1));
-        assertEquals("Errore : object third position", o03, sub.get(2));
+        assertEquals("Errore : oggetto prima posizione", o01, sub.get(0));
+        assertEquals("Errore : oggetto seconda posizione", o02, sub.get(1));
+        assertEquals("Errore : oggetto terza posizione", o03, sub.get(2));
 
-        assertThrows("Errore : exception 1 not thrown", NullPointerException.class, () -> sub.add(null));
-        assertThrows("Errore : exception 2 not thrown", NullPointerException.class, () -> sub.add(0, null));
-        assertThrows("Errore : exception 3 not thrown", IndexOutOfBoundsException.class, () -> sub.add(-1, new Object()));
+        assertThrows("Errore : eccezione 1 not thrown", NullPointerException.class, () -> sub.add(null));
+        assertThrows("Errore : eccezione 2 not thrown", NullPointerException.class, () -> sub.add(0, null));
+        assertThrows("Errore : eccezione 3 not thrown", IndexOutOfBoundsException.class, () -> sub.add(-1, new Object()));
 
         sub.clear();
 
@@ -340,18 +340,18 @@ public class ListTest {
         c.add(o02);
         assertTrue("Errore : sublist didn't add, c", sub.addAll(c));
         assertEquals("Errore : sublist size is not 2", 2, sub.size());
-        assertEquals("Errore : object first position", o01, sub.get(0));
-        assertEquals("Errore : object second position", o02, sub.get(1));
+        assertEquals("Errore : oggetto prima posizione", o01, sub.get(0));
+        assertEquals("Errore : oggetto seconda posizione", o02, sub.get(1));
 
         assertTrue("Errore : sublist didn't add, c", sub.addAll(1, c));
-        assertEquals("Errore : object first position", o01, sub.get(0));
-        assertEquals("Errore : object second position", o01, sub.get(1));
-        assertEquals("Errore : object third position", o02, sub.get(2));
-        assertEquals("Errore : object fourth position", o02, sub.get(3));
+        assertEquals("Errore : oggetto prima posizione", o01, sub.get(0));
+        assertEquals("Errore : oggetto seconda posizione", o01, sub.get(1));
+        assertEquals("Errore : oggetto terza posizione", o02, sub.get(2));
+        assertEquals("Errore : oggetto quarta posizione", o02, sub.get(3));
 
-        assertThrows("Errore : exception 1 not thrown", NullPointerException.class, () -> sub.addAll(null));
-        assertThrows("Errore : exception 2 not thrown", NullPointerException.class, () -> sub.addAll(0, null));
-        assertThrows("Errore : exception 3 not thrown", IndexOutOfBoundsException.class, () -> sub.addAll(-1, c));
+        assertThrows("Errore : eccezione 1 not thrown", NullPointerException.class, () -> sub.addAll(null));
+        assertThrows("Errore : eccezione 2 not thrown", NullPointerException.class, () -> sub.addAll(0, null));
+        assertThrows("Errore : eccezione 3 not thrown", IndexOutOfBoundsException.class, () -> sub.addAll(-1, c));
 
         HList n = new ListAdapter();
         assertFalse("Errore : added", sub.addAll(n));
@@ -372,7 +372,7 @@ public class ListTest {
         assertTrue("Errore : doesn't contain", sub.contains(o02));
         assertFalse("Errore : contains", sub.contains(o03));
 
-        assertThrows("Errore : exception not thrown", NullPointerException.class, () -> sub.contains(null));
+        assertThrows("Errore : eccezione not thrown", NullPointerException.class, () -> sub.contains(null));
 
         sub.clear();
 
@@ -391,7 +391,7 @@ public class ListTest {
         n1.add(o07);
         assertFalse("Errore : contains", sub.containsAll(n1));
 
-        assertThrows("Errore : exception 1 not thrown", NullPointerException.class, () -> sub.containsAll(null));
+        assertThrows("Errore : eccezione 1 not thrown", NullPointerException.class, () -> sub.containsAll(null));
 
         sub.clear();
 
@@ -406,10 +406,10 @@ public class ListTest {
 
         //get
         sub.add(o02); sub.add(o01);
-        assertEquals("Errore : wrong position o02", o02, sub.get(0));
-        assertEquals("Errore : wrong position o01", o01, sub.get(1));
+        assertEquals("Errore : posizione sbagliata o02", o02, sub.get(0));
+        assertEquals("Errore : posizione sbagliata o01", o01, sub.get(1));
 
-        assertThrows("Errore : exception not thrown", IndexOutOfBoundsException.class, () -> sub.get(-1));
+        assertThrows("Errore : eccezione not thrown", IndexOutOfBoundsException.class, () -> sub.get(-1));
 
         sub.clear();
 
@@ -417,11 +417,11 @@ public class ListTest {
         sub.add(o01);
         sub.add(o02);
 
-        assertEquals("Errore : wrong position o01", 0, sub.indexOf(o01));
-        assertEquals("Errore : wrong position o02", 1, sub.indexOf(o02));
-        assertEquals("Errore : wrong position o03", -1, sub.indexOf(o03));
+        assertEquals("Errore : posizione sbagliata o01", 0, sub.indexOf(o01));
+        assertEquals("Errore : posizione sbagliata o02", 1, sub.indexOf(o02));
+        assertEquals("Errore : posizione sbagliata o03", -1, sub.indexOf(o03));
 
-        assertThrows("Errore : exception not thrown", NullPointerException.class, () -> sub.indexOf(null));
+        assertThrows("Errore : eccezione not thrown", NullPointerException.class, () -> sub.indexOf(null));
 
         sub.clear();
 
@@ -448,7 +448,7 @@ public class ListTest {
         assertFalse("Errore : this doesn't have next", iter1.hasNext());
         assertEquals("Errore : the size was not 4", 4, sub.size());
 
-        assertThrows("Errore : exception not thrown", IllegalStateException.class, () -> iter1.remove());
+        assertThrows("Errore : eccezione not thrown", IllegalStateException.class, () -> iter1.remove());
 
         sub.clear();
 
@@ -458,10 +458,10 @@ public class ListTest {
         sub.add(o01);
         sub.add(o02);
 
-        assertEquals("Errore : wrong position o01", 2, sub.lastIndexOf(o01));
-        assertEquals("Errore : wrong position o01", 3, sub.lastIndexOf(o02));
+        assertEquals("Errore : posizione sbagliata o01", 2, sub.lastIndexOf(o01));
+        assertEquals("Errore : posizione sbagliata o01", 3, sub.lastIndexOf(o02));
 
-        assertThrows("Errore : exception not thrown", NullPointerException.class, () -> sub.lastIndexOf(null));
+        assertThrows("Errore : eccezione not thrown", NullPointerException.class, () -> sub.lastIndexOf(null));
         
         sub.clear();
 
@@ -476,15 +476,15 @@ public class ListTest {
         iter2.next();
         iter2.next();
         iter2.add(o01);
-        assertEquals("Errore : didn't remove", 6, sub.size());
+        assertEquals("Errore : non rimosso", 6, sub.size());
         assertEquals("Errore : insertion went wrong", o01, sub.get(2));
         assertTrue("Errore : apparently has no previous", iter2.hasPrevious());
         assertEquals("Errore : iterator misplaced", o01, iter2.previous());
         iter2.remove();
-        assertEquals("Errore : didn't remove", 5, sub.size());
+        assertEquals("Errore : non rimosso", 5, sub.size());
         assertEquals("Errore : iterator prev index check", 1, iter2.previousIndex());
         assertEquals("Errore : iterator next index check", 2, iter2.nextIndex());
-        assertThrows("Errore : exception not thrown", IllegalStateException.class, () -> iter2.remove());
+        assertThrows("Errore : eccezione not thrown", IllegalStateException.class, () -> iter2.remove());
         assertEquals("Errore : structure got messed up", o03, iter2.next());
 
         sub.clear();
@@ -500,20 +500,20 @@ public class ListTest {
         sub.add(o02);
         sub.add(o03);
 
-        assertEquals("Errore : wrong position o01", o01, sub.remove(0));
-        assertEquals("Errore : wrong position o02", o02, sub.remove(3));
-        assertEquals("Errore : wrong position o03", o03, sub.remove(6));
+        assertEquals("Errore : posizione sbagliata o01", o01, sub.remove(0));
+        assertEquals("Errore : posizione sbagliata o02", o02, sub.remove(3));
+        assertEquals("Errore : posizione sbagliata o03", o03, sub.remove(6));
 
-        assertTrue("Errore : no such element, o01", sub.remove(o01));
-        assertTrue("Errore : no such element, o02", sub.remove(o02));
-        assertTrue("Errore : no such element, o03", sub.remove(o03));
+        assertTrue("Errore : non c'è l'elemento, o01", sub.remove(o01));
+        assertTrue("Errore : non c'è l'elemento, o02", sub.remove(o02));
+        assertTrue("Errore : non c'è l'elemento, o03", sub.remove(o03));
 
         assertEquals("Errore : size check", 3, sub.size());
         Object o08 = new Object();
         assertFalse("Errore : o04 was in the list", sub.remove(o08));
 
-        assertThrows("Errore : exception 1 not thrown", IndexOutOfBoundsException.class, () -> sub.remove(-1));
-        assertThrows("Errore : exception 2 not thrown", NullPointerException.class, () -> sub.remove(null));
+        assertThrows("Errore : eccezione 1 not thrown", IndexOutOfBoundsException.class, () -> sub.remove(-1));
+        assertThrows("Errore : eccezione 2 not thrown", NullPointerException.class, () -> sub.remove(null));
         
         sub.clear();
 
@@ -527,10 +527,10 @@ public class ListTest {
         sub.add(o02);
         sub.add(o01);
 
-        assertTrue("Errore : list not modified", sub.removeAll(c3));
+        assertTrue("Errore : lista non modificata", sub.removeAll(c3));
         assertEquals("Errore : size check", 3, sub.size());
 
-        assertThrows("Errore : exception not thrown", NullPointerException.class, () -> sub.removeAll(null));
+        assertThrows("Errore : eccezione not thrown", NullPointerException.class, () -> sub.removeAll(null));
     
         sub.clear();
 
@@ -544,10 +544,10 @@ public class ListTest {
         sub.add(o02);
         sub.add(o01);
 
-        assertTrue("Errore : list not modified", sub.retainAll(c4));
+        assertTrue("Errore : lista non modificata", sub.retainAll(c4));
         assertEquals("Errore : size check", 4, sub.size());
 
-        assertThrows("Errore : exception not thrown", NullPointerException.class, () -> sub.retainAll(null));
+        assertThrows("Errore : eccezione not thrown", NullPointerException.class, () -> sub.retainAll(null));
         
         sub.clear();
 
@@ -557,11 +557,11 @@ public class ListTest {
         sub.add(o03);
         sub.add(o03);
 
-        assertEquals("Errore : replaced wrong one", o03, sub.set(2, o02));
-        assertEquals("Errore : o02 not replaced correctly", o02, sub.get(2));
+        assertEquals("Errore : rimpiazzato quello sbagliato", o03, sub.set(2, o02));
+        assertEquals("Errore : o02 non correttamente rimpiazzato", o02, sub.get(2));
 
-        assertThrows("Errore : exception 1 not thrown", NullPointerException.class, () -> sub.set(1, null));
-        assertThrows("Errore : exception 2 not thrown", IndexOutOfBoundsException.class, () -> sub.set(-1, o01));
+        assertThrows("Errore : eccezione 1 not thrown", NullPointerException.class, () -> sub.set(1, null));
+        assertThrows("Errore : eccezione 2 not thrown", IndexOutOfBoundsException.class, () -> sub.set(-1, o01));
     
         sub.clear();
 
@@ -570,7 +570,7 @@ public class ListTest {
         sub.add(o02);
         sub.add(o03);
 
-        assertEquals("Failed: wrong size calculation", 3, sub.size());
+        assertEquals("Failed: calcolo size sbagliato", 3, sub.size());
     
         sub.clear();
 
@@ -579,15 +579,13 @@ public class ListTest {
         sub.add(o02);
         sub.add(o03);
 
-        assertArrayEquals("Errore : wrong copy 1", new Object[] { o01, o02, o03 }, sub.toArray());
-        assertArrayEquals("Errore : wrong copy 2", new Object[] { o01, o02, o03, null }, sub.toArray(new Object[4]));
-        assertArrayEquals("Errore : didn't resize", new Object[] { o01, o02, o03 }, sub.toArray(new Object[1]));
+        assertArrayEquals("Errore : copia sbagliata 1", new Object[] { o01, o02, o03 }, sub.toArray());
+        assertArrayEquals("Errore : copia sbagliata 2", new Object[] { o01, o02, o03, null }, sub.toArray(new Object[4]));
+        assertArrayEquals("Errore : non resizata", new Object[] { o01, o02, o03 }, sub.toArray(new Object[1]));
 
-        assertThrows("Errore : exception not thrown", NullPointerException.class, () -> sub.toArray(null));
+        assertThrows("Errore : eccezione not thrown", NullPointerException.class, () -> sub.toArray(null));
 
-        
-
-
+        sub.clear();
     }
 
     @Test
@@ -596,10 +594,10 @@ public class ListTest {
         l.add(o02);
         l.add(o03);
 
-        assertArrayEquals("Errore : wrong copy 1", new Object[] { o01, o02, o03 }, l.toArray());
-        assertArrayEquals("Errore : wrong copy 2", new Object[] { o01, o02, o03, null }, l.toArray(new Object[4]));
-        assertArrayEquals("Errore : didn't resize", new Object[] { o01, o02, o03 }, l.toArray(new Object[1]));
+        assertArrayEquals("Errore : copia sbagliata 1", new Object[] { o01, o02, o03 }, l.toArray());
+        assertArrayEquals("Errore : copia sbagliata 2", new Object[] { o01, o02, o03, null }, l.toArray(new Object[4]));
+        assertArrayEquals("Errore : non resizata", new Object[] { o01, o02, o03 }, l.toArray(new Object[1]));
 
-        assertThrows("Errore : exception not thrown", NullPointerException.class, () -> l.toArray(null));
+        assertThrows("Errore : eccezione not thrown", NullPointerException.class, () -> l.toArray(null));
     }
 }

@@ -7,7 +7,7 @@
  * MapAdapter[HMap]:{ EntrySet[HSet]              :{ Iterator[HIterator]
  *                  { KeySet[HSet]                :{ Iterator[HIterator]
  *                  { ValueCollection[HCollection]:{ Iterator[HIterator]
- *                  { MyEntry[HEntry]
+ *                  { MyEntry[HMap.HEntry]
  *                                           
  */
 package myAdapter;
@@ -76,9 +76,9 @@ public class MapAdapter implements HMap {
         public boolean contains(Object o) {
             if (o == null)
                 throw new NullPointerException();
-            if (!(o instanceof HEntry))
+            if (!(o instanceof HMap.HEntry))
                 return false;
-            HEntry he = (HEntry) o;
+            HMap.HEntry he = (HMap.HEntry) o;
             return map.containsKey(he.getKey()) && map.get(he.getKey()).equals(he.getValue());
         }
 
@@ -129,9 +129,9 @@ public class MapAdapter implements HMap {
         public boolean remove(Object o) {
             if (o == null)
                 throw new NullPointerException();
-            if (!(o instanceof HEntry))
+            if (!(o instanceof HMap.HEntry))
                 return false;
-            HEntry he = (HEntry) o;
+            HMap.HEntry he = (HMap.HEntry) o;
             if (contains(he)) {
                 map.remove(he.getKey());
                 return true;
@@ -367,7 +367,7 @@ public class MapAdapter implements HMap {
 
             public Iterator() {
                 last = null;
-                k = MapAdapter.this.hash.elements();
+                k = MapAdapter.this.hash.keys();
                 next = false;
             }
 
@@ -530,7 +530,7 @@ public class MapAdapter implements HMap {
         }
     }
 
-    private class MyEntry implements HEntry {
+    private class MyEntry implements HMap.HEntry {
 
         protected Object key, value;
         protected MapAdapter map;
@@ -543,9 +543,9 @@ public class MapAdapter implements HMap {
 
         @Override
         public boolean equals(Object o) {
-            if (!(o instanceof HEntry))
+            if (!(o instanceof HMap.HEntry))
                 return false;
-            HEntry cmp = (HEntry) o;
+            HMap.HEntry cmp = (HMap.HEntry) o;
             return (getKey() == null ? cmp.getKey() == null : getKey().equals(cmp.getKey()))
                     && (getValue() == null ? cmp.getValue() == null : getValue().equals(cmp.getValue()));
         }
