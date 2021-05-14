@@ -186,9 +186,9 @@ public class MapAdapter implements HMap {
             if (a.length < map.size())
                 a = new Object[map.size()];
             HIterator iter = iterator();
-            for (int i = 0; i < a.length; i++) {
-                a[i] = iter.next();
-            }
+            int i = 0;
+            while (iter.hasNext())
+                a[i++] = iter.next();
             return a;
         }
     }
@@ -351,9 +351,9 @@ public class MapAdapter implements HMap {
             if (a.length < map.size())
                 a = new Object[map.size()];
             HIterator iter = iterator();
-            for (int i = 0; i < a.length; i++) {
-                a[i] = iter.next();
-            }
+            int i = 0;
+            while (iter.hasNext())
+                a[i++] = iter.next();
             return a;
         }
     }
@@ -523,9 +523,9 @@ public class MapAdapter implements HMap {
             if (a.length < map.size())
                 a = new Object[map.size()];
             HIterator iter = iterator();
-            for (int i = 0; i < a.length; i++) {
-                a[i] = iter.next();
-            }
+            int i = 0;
+            while (iter.hasNext())
+                a[i++] = iter.next();
             return a;
         }
     }

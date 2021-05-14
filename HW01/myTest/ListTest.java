@@ -592,11 +592,10 @@ public class ListTest {
     public void list_toArray() {
         l.add(o01);
         l.add(o02);
-        l.add(o03);
 
-        assertArrayEquals("Errore : copia sbagliata 1", new Object[] { o01, o02, o03 }, l.toArray());
-        assertArrayEquals("Errore : copia sbagliata 2", new Object[] { o01, o02, o03, null }, l.toArray(new Object[4]));
-        assertArrayEquals("Errore : non resizata", new Object[] { o01, o02, o03 }, l.toArray(new Object[1]));
+        assertArrayEquals("Errore : copia sbagliata 1", new Object[] { o01, o02 }, l.toArray());
+        assertArrayEquals("Errore : copia sbagliata 2", new Object[] { o01, o02, null }, l.toArray(new Object[3]));
+        assertArrayEquals("Errore : non resizata", new Object[] { o01, o02 }, l.toArray(new Object[1]));
 
         assertThrows("Errore : eccezione not thrown", NullPointerException.class, () -> l.toArray(null));
     }
