@@ -138,6 +138,8 @@ public class ListTest {
 
     @Test
     public void list_isEmpty() {
+        l.add(o01);
+        l.clear();
         assertTrue("Errore : non vuota", l.isEmpty());
     }
 

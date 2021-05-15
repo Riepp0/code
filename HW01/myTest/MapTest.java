@@ -72,8 +72,8 @@ public class MapTest {
         m.put(k04, v04);
         m.put(k05, v05);
 
-        HSet es = m.entrySet();
-        HIterator iter = es.iterator();
+        HSet entryset = m.entrySet();
+        HIterator iter = entryset.iterator();
         HMap.HEntry e = (HMap.HEntry) iter.next();
         assertTrue("Errore : non contiene k", m.containsKey(e.getKey()));
         assertTrue("Errore : non contiene v", m.containsValue(e.getValue()));
@@ -87,7 +87,7 @@ public class MapTest {
         Object oldkey = e.getKey();
         iter.remove();
         assertFalse(m.containsKey(oldkey));
-        assertEquals("Errore : non è stato rimosso", 4, es.size());
+        assertEquals("Errore : non è stato rimosso", 4, entryset.size());
         assertEquals("Errore : backing su", 4, m.size());
         assertThrows("Errore : impossibile chiamare un remove dopo un remove", IllegalStateException.class, () -> iter.remove());
 
@@ -96,15 +96,15 @@ public class MapTest {
         l.add(e);
         e = (HMap.HEntry) iter.next();
         l.add(e);
-        assertTrue("Errore : non contiene elementi dal proprio iteratore", es.containsAll(l));
+        assertTrue("Errore : non contiene elementi dal proprio iteratore", entryset.containsAll(l));
 
-        assertTrue("Errore : non è stato rimosso l'elemento contenuto", es.remove(e));
-        assertFalse("Errore : contiene ancora l'elemento rimosso", es.contains(e));
+        assertTrue("Errore : non è stato rimosso l'elemento contenuto", entryset.remove(e));
+        assertFalse("Errore : contiene ancora l'elemento rimosso", entryset.contains(e));
         m.put(e.getKey(), e.getValue());
-        assertTrue("Errore : non è stato rimosso l'elemento contenuto", es.removeAll(l));
-        assertThrows("Errore : removing null", NullPointerException.class, () -> es.removeAll(null));
-        assertTrue("Errore : non sono stati rimosso gli elementi contenuto nella collection", es.retainAll(l));
-        assertThrows("Errore : retaining null", NullPointerException.class, () -> es.retainAll(null));
+        assertTrue("Errore : non è stato rimosso l'elemento contenuto", entryset.removeAll(l));
+        assertThrows("Errore : removing null", NullPointerException.class, () -> entryset.removeAll(null));
+        assertTrue("Errore : non sono stati rimosso gli elementi contenuto nella collection", entryset.retainAll(l));
+        assertThrows("Errore : retaining null", NullPointerException.class, () -> entryset.retainAll(null));
 
         m.clear();
         m.put(k01, v01);
@@ -112,14 +112,14 @@ public class MapTest {
         m.put(k03, v03);
         m.put(k04, v04);
         m.put(k05, v05);
-        HSet es2 = m.entrySet();
+        HSet entryset1 = m.entrySet();
 
         l.clear();
-        HIterator it = es2.iterator();
+        HIterator it = entryset1.iterator();
         while (it.hasNext()) {
             l.add(it.next());
         }
-        Object[] arr = es2.toArray();
+        Object[] arr = entryset1.toArray();
         assertEquals(l.size(), arr.length);
         for (int i = 0; i < arr.length; i++) {
             assertTrue(l.contains(arr[i]));
@@ -143,6 +143,8 @@ public class MapTest {
 
     @Test
     public void map_isEmpty() {
+        m.put(k01, v01);
+        m.clear();
         assertTrue("Errore : non ha dimensione 0", m.isEmpty());
     }
 
@@ -154,8 +156,8 @@ public class MapTest {
         m.put(k04, v04);
         m.put(k05, v05);
 
-        HSet ks = m.keySet();
-        HIterator iter = ks.iterator();
+        HSet keyset = m.keySet();
+        HIterator iter = keyset.iterator();
         Object e = iter.next();
         assertTrue("Errore : non contiene v", m.containsKey(e));
 
@@ -163,7 +165,7 @@ public class MapTest {
         Object oldkey = e;
         iter.remove();
         assertFalse(m.containsKey(oldkey));
-        assertEquals("Errore : non è stato rimosso", 4, ks.size());
+        assertEquals("Errore : non è stato rimosso", 4, keyset.size());
         assertEquals("Errore : backing su", 4, m.size());
         assertThrows("Errore : impossibile chiamare un remove dopo un remove", IllegalStateException.class, () -> iter.remove());
 
@@ -172,15 +174,15 @@ public class MapTest {
         l.add(e);
         e = iter.next();
         l.add(e);
-        assertTrue("Errore : non contiene elementi del proprio iteratore", ks.containsAll(l));
+        assertTrue("Errore : non contiene elementi del proprio iteratore", keyset.containsAll(l));
 
-        assertTrue("Errore : non è stato rimosso l'elemento contenuto", ks.remove(e));
-        assertFalse("Errore : contiene ancora l'elemento rimosso", ks.contains(e));
+        assertTrue("Errore : non è stato rimosso l'elemento contenuto", keyset.remove(e));
+        assertFalse("Errore : contiene ancora l'elemento rimosso", keyset.contains(e));
         m.put(e, v06);
-        assertTrue("Errore : non è stato rimosso l'elemento contenuto", ks.removeAll(l));
-        assertThrows("Errore : removing null", NullPointerException.class, () -> ks.removeAll(null));
-        assertTrue("Errore : non sono stati rimosso gli elementi contenuto nella collection", ks.retainAll(l));
-        assertThrows("Errore : retaining null", NullPointerException.class, () -> ks.retainAll(null));
+        assertTrue("Errore : non è stato rimosso l'elemento contenuto", keyset.removeAll(l));
+        assertThrows("Errore : removing null", NullPointerException.class, () -> keyset.removeAll(null));
+        assertTrue("Errore : non sono stati rimosso gli elementi contenuto nella collection", keyset.retainAll(l));
+        assertThrows("Errore : retaining null", NullPointerException.class, () -> keyset.retainAll(null));
 
         m.clear();
         m.put(k01, v01);
@@ -251,8 +253,8 @@ public class MapTest {
         m.put(k04, v04);
         m.put(k05, v05);
 
-        HCollection vc = m.values();
-        HIterator iter = vc.iterator();
+        HCollection valuecollection = m.values();
+        HIterator iter = valuecollection.iterator();
         Object e = iter.next();
         assertTrue("Errore : non contiene k", m.containsValue(e));
 
@@ -260,7 +262,7 @@ public class MapTest {
         Object oldval = e;
         iter.remove();
         assertFalse(m.containsValue(oldval));
-        assertEquals("Errore : non è stato rimosso", 4, vc.size());
+        assertEquals("Errore : non è stato rimosso", 4, valuecollection.size());
         assertEquals("Errore : backing su", 4, m.size());
         assertThrows("Errore : impossibile chiamare un remove dopo un remove", IllegalStateException.class, () -> iter.remove());
 
@@ -269,15 +271,15 @@ public class MapTest {
         l.add(e);
         e = iter.next();
         l.add(e);
-        assertTrue("Errore : non contiene elementi del proprio iteratore", vc.containsAll(l));
+        assertTrue("Errore : non contiene elementi del proprio iteratore", valuecollection.containsAll(l));
 
-        assertTrue("Errore : non è stato rimosso l'elemento contenuto", vc.remove(e));
-        assertFalse("Errore : contiene ancora l'elemento rimosso", vc.contains(e));
+        assertTrue("Errore : non è stato rimosso l'elemento contenuto", valuecollection.remove(e));
+        assertFalse("Errore : contiene ancora l'elemento rimosso", valuecollection.contains(e));
         m.put(k06, e);
-        assertTrue("Errore : non è stato rimosso l'elemento contenuto", vc.removeAll(l));
-        assertThrows("Errore : removing null", NullPointerException.class, () -> vc.removeAll(null));
-        assertTrue("Errore : non sono stati rimosso gli elementi contenuto nella collection", vc.retainAll(l));
-        assertThrows("Errore : retaining null", NullPointerException.class, () -> vc.retainAll(null));
+        assertTrue("Errore : non è stato rimosso l'elemento contenuto", valuecollection.removeAll(l));
+        assertThrows("Errore : removing null", NullPointerException.class, () -> valuecollection.removeAll(null));
+        assertTrue("Errore : non sono stati rimosso gli elementi contenuto nella collection", valuecollection.retainAll(l));
+        assertThrows("Errore : retaining null", NullPointerException.class, () -> valuecollection.retainAll(null));
 
         m.clear();
         m.put(k01, v01);
