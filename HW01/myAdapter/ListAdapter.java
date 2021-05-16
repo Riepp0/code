@@ -491,7 +491,7 @@ public class ListAdapter implements HList {
 
         @Override
         public HList subList(int from, int to) {
-            if (from < from || to > to)
+            if (from < 0 || to > size() || from > to)
                 throw new IndexOutOfBoundsException();
             return new SubList(from, to);
         }

@@ -588,6 +588,45 @@ public class ListTest {
         assertThrows("Errore : eccezione not thrown", NullPointerException.class, () -> sub.toArray(null));
 
         sub.clear();
+
+        // backing
+        HList t = new ListAdapter();
+        t.add(o01);
+        t.add(o02);
+        sub.add(o01);
+        assertArrayEquals("Errore : backing errato 1", new Object[] { NO, NO, o01, NO, NO }, l.toArray());
+        sub.remove(o01);
+        assertArrayEquals("Errore : backing errato 2", new Object[] { NO, NO, NO, NO }, l.toArray());
+        sub.addAll(t);
+        assertArrayEquals("Errore : backing errato 3", new Object[] { NO, NO, o01, o02, NO, NO }, l.toArray());
+        sub.removeAll(t);
+        assertArrayEquals("Errore : backing errato 4", new Object[] { NO, NO, NO, NO }, l.toArray());
+        sub.add(o01);
+        sub.add(o02);
+        sub.add(o03);
+        sub.retainAll(t);
+        assertArrayEquals("Errore : backing errato 5", new Object[] { NO, NO, o01, o02, NO, NO }, l.toArray());
+        sub.add(o03);
+        HIterator iter3 = sub.iterator();
+        iter3.next();
+        iter3.remove();
+        assertArrayEquals("Errore : backing errato 6", new Object[] { NO, NO, o02, o03, NO, NO }, l.toArray());
+
+        sub.clear();
+
+        // subList
+        sub.add(NO);
+        sub.add(o01);
+        sub.add(o02);
+        sub.add(o03);
+        sub.add(o04);
+        sub.add(NO);
+        HList subsub = sub.subList(1, 5);
+        assertArrayEquals("Errore : inizializzazione subsublist", new Object[] { o01, o02, o03, o04 }, subsub.toArray());
+        subsub.remove(o03);
+        assertArrayEquals("Errore : remove subsublist", new Object[] { o01, o02, o04 }, subsub.toArray());
+        assertArrayEquals("Errore : backing sub subsublist", new Object[] { NO, o01, o02, o04, NO }, sub.toArray());
+        assertArrayEquals("Errore : backing list subsublist", new Object[] { NO, NO, NO, o01, o02, o04, NO, NO, NO }, l.toArray());
     }
 
     @Test
