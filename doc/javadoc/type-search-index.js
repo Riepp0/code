@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes","url":"allclasses-index.html"},{"p":"myAdapter","l":"HCollection"},{"p":"myAdapter","l":"HMap.HEntry"},{"p":"myAdapter","l":"HIterator"},{"p":"myAdapter","l":"HList"},{"p":"myAdapter","l":"HListIterator"},{"p":"myAdapter","l":"HMap"},{"p":"myAdapter","l":"HSet"}]
