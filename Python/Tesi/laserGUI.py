@@ -1,7 +1,7 @@
 from distutils.command.config import config
 import glob, os
 import tkinter as tk
-import PIL.Image, PIL.ImageTk
+from PIL import Image, ImageTk
 from tkinter import *
 from tkinter import font
 
@@ -33,10 +33,10 @@ def switch():
         my_label.config(text = "Laser is on", fg="green")
         is_on = False
 ### Define images
-imon = PIL.Image.open("off.png")
-on = PIL.ImageTk.PhotoImage(imon)
-imoff = PIL.Image.open("./img/on.png")
-off = PIL.ImageTk.PhotoImage(imoff)
+imon = Image.open("off.png")
+on = ImageTk.PhotoImage(imon)
+imoff = Image.open("./img/on.png")
+off = ImageTk.PhotoImage(imoff)
 
 ### Button
 on_button = Button(root, image = on, bd = 0, command = switch)
