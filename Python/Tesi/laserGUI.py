@@ -16,9 +16,9 @@ root.geometry("800x600")
 
 is_on = True
 
-### Create label
+### Create label + button
 my_label = Label(root, text = "The laser is OFF", font = ("Helvetica", 14))
-my_label.pack(pady = 20)
+my_label.grid(row = 0, column = 0, columnspan = 1)
 
 ### Switch function
 def switch():
@@ -40,11 +40,24 @@ off = PhotoImage(file = r"D:\code\code\Python\Tesi\off.png")
 
 ### Create A Button
 on_button = Button(root, image = off, command = switch)
-on_button.pack(pady = 20)
+on_button.grid(row = 1, column = 0)
 
-### Create an edittext
-#my_entry = Entry(root, font=("Helvetica", 14))
-#my_entry.pack(pady = 20)
+### Create label
+my_power = Label(root, text = "Insert power (mA)", font = ("Helvetica", 14))
+my_power.grid(row = 2, column = 0)
+
+### Create edit text
+power_text = Entry(root, width = 10)
+power_text.grid(row = 2, column = 1)
+
+### Create label 
+my_temp = Label(root, text = "Insert temperature (°C)", font = ("Helvetica", 14))
+my_temp.grid(row = 3, column = 0)
+
+### Create edit text
+temp_text = Entry(root, width = 10)
+temp_text.grid(row = 3, column = 1)
+
 
 ### Execute
 root.mainloop()
