@@ -1,9 +1,9 @@
 from distutils.command.config import config
 import glob, os
 import tkinter as tk
-from PIL import Image, ImageTk
 from tkinter import *
-from tkinter import font
+from PIL import Image, ImageFont, ImageDraw, ImageTk
+
 
 ### Create object
 root = tk.Tk()
@@ -14,33 +14,40 @@ root.title("Laser GUI")
 ### Dimension
 root.geometry("800x600")
 
+is_on = True
 
-### Create label 
-is_on = False
-my_label = Label(root, text = "Laser is off", fg="red", font = ("Helvetica", 14))
-my_label.pack(pady = 10)
+### Create label
+my_label = Label(root,
+    text = "The Switch Is On!",
+    fg = "green",
+    font = ("Helvetica", 14))
+ 
+my_label.pack(pady = 20)
 
 ### Switch function
 def switch():
     global is_on
-
+     
+    # Determine is on or off
     if is_on:
-        on_button:config(image = off)
-        my_label.config(text = "Laser is off", fg="grey")
-        is_on = True
-    else:
-        on_button:config(image = on)
-        my_label.config(text = "Laser is on", fg="green")
+        on_button.config(image = off)
+        my_label.config(text = "The Switch is Off",
+                        fg = "grey")
         is_on = False
-### Define images
-imon = Image.open("off.png")
-on = ImageTk.PhotoImage(imon)
-imoff = Image.open("./img/on.png")
-off = ImageTk.PhotoImage(imoff)
+    else:
+       
+        on_button.config(image = on)
+        my_label.config(text = "The Switch is On", fg = "green")
+        is_on = True
 
-### Button
-on_button = Button(root, image = on, bd = 0, command = switch)
-on_button.pack(pady = 10)
+### Images
+on = PhotoImage(file = "on.png")
+off = PhotoImage(file = "off.png")
+
+# Create A Button
+on_button = Button(root, image = on, bd = 0,
+                   command = switch)
+on_button.pack(pady = 50)
 
 ### Execute
 root.mainloop()
