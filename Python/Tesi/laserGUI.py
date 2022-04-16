@@ -14,10 +14,10 @@ root.title("Laser GUI")
 ### Dimension
 root.geometry("800x600")
 
-is_on = False
+is_on = True
 
 ### Create label
-my_label = Label(root, text = "The Switch Is On", font = ("Helvetica", 14))
+my_label = Label(root, text = "The laser is OFF", font = ("Helvetica", 14))
 my_label.pack(pady = 20)
 
 ### Switch function
@@ -27,11 +27,11 @@ def switch():
     # Determine is on or off
     if is_on:
         on_button.config(image = on)
-        my_label.config(text = "The Switch is On")
+        my_label.config(text = "The laser is ON")
         is_on = False
     else:
         on_button.config(image = off)
-        my_label.config(text = "The Switch is Off")
+        my_label.config(text = "The laser is OFF")
         is_on = True
 
 ### Images
@@ -39,7 +39,7 @@ on = PhotoImage(file = r"D:\code\code\Python\Tesi\on.png")
 off = PhotoImage(file = r"D:\code\code\Python\Tesi\off.png")
 
 ### Create A Button
-on_button = Button(root, image = on, command = switch)
+on_button = Button(root, image = off, command = switch)
 on_button.pack(pady = 20)
 
 ### Create an edittext
