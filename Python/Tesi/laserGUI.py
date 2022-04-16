@@ -21,7 +21,7 @@ root.title("Laser GUI")
 ### Dimension
 root.geometry("800x600")
 
-is_on = True
+is_on = False
 
 ### Create label + button
 my_label = Label(root, text = "The laser is OFF", font = ("Helvetica", 14))
@@ -33,12 +33,12 @@ def switch():
      
     # Determine is on or off
     if is_on:
-        on_button.config(image = on)
-        my_label.config(text = "The laser is ON")
-        is_on = False
-    else:
         on_button.config(image = off)
         my_label.config(text = "The laser is OFF")
+        is_on = False
+    else:
+        on_button.config(image = on)
+        my_label.config(text = "The laser is ON")
         is_on = True
 
 ### Images
@@ -65,6 +65,9 @@ power_text.grid(row = 2, column = 1)
 power_err = Label(root, font = ("Helvetica", 14))
 power_err.grid(row = 2, column = 4)
 def check_power():
+    if is_on == False:
+        power_err.config(text = "The laser is OFF")
+        return
     try:
         power = int(power_text.get())
         if power < LOWPOWERLIMIT or power > HIGHPOWERLIMIT:
@@ -95,6 +98,9 @@ temp_text.grid(row = 3, column = 1)
 temp_err = Label(root, font = ("Helvetica", 14))
 temp_err.grid(row = 3, column = 4)
 def check_temp():
+    if is_on == False:
+        temp_err.config(text = "The laser is OFF")
+        return
     try:
         temp = int(temp_text.get())
         if temp < LOWTEMPERATURELIMIT or temp > HIGHTEMPERATURELIMIT:
