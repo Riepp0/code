@@ -42,8 +42,8 @@ def switch():
         is_on = True
 
 ### Images
-on = PhotoImage(file = r"D:\code\code\Python\Tesi\on.png")
-off = PhotoImage(file = r"D:\code\code\Python\Tesi\off.png")
+on = PhotoImage(file = r"C:\Users\miche\source\vscode\code\Python\Tesi\on.png")
+off = PhotoImage(file = r"C:\Users\miche\source\vscode\code\Python\Tesi\off.png")
 
 ### Create A Button
 on_button = Button(root, image = off, command = switch)
