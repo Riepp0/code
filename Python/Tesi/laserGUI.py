@@ -35,17 +35,19 @@ def switch():
     if is_on:
         on_button.config(image = off)
         my_label.config(text = "The laser is OFF")
+        # TURN LASER OFF THRUGH COMMAND
         is_on = False
     else:
         on_button.config(image = on)
         my_label.config(text = "The laser is ON")
+        # TURN LASER ON THRUGH COMMAND
         is_on = True
 
 ### Images
 on = PhotoImage(file = r"C:\Users\miche\source\vscode\code\Python\Tesi\on.png")
 off = PhotoImage(file = r"C:\Users\miche\source\vscode\code\Python\Tesi\off.png")
 
-### Create A Button
+### Create A Button (SWitch)
 on_button = Button(root, image = off, command = switch)
 on_button.grid(row = 1, column = 0)
 ##########################################################################################################
@@ -76,6 +78,7 @@ def check_power():
         power_err.config(text = "Insert a valid number!")
     else:
         power_err.config(text = "Power set!")
+        # SET LASER POWER THRUGH COMMAND
     
 
 ### Create set button
@@ -109,6 +112,7 @@ def check_temp():
         temp_err.config(text = "Insert a valid number!")
     else:
         temp_err.config(text = "Temperature set!")
+        # SET LASER TEMPERATURE THRUGH COMMAND
 
 # Create set button
 set_temp = Button(root, text = "Set", command = check_temp)
