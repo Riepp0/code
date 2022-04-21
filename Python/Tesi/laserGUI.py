@@ -1,16 +1,17 @@
+from asyncore import write
 from distutils.command.config import config
 from tkinter import *
 from tkinter.ttk import *
 from PIL import Image, ImageFont, ImageDraw, ImageTk
-import glob, os
+import glob, os, serial
 
 
-LOWPOWERLIMIT = 40
-HIGHPOWERLIMIT = 70
+LOWCURRENTLIMIT = 40
+HIGHCURRENTLIMIT = 50
 LOWTEMPERATURELIMIT = 20
-HIGHTEMPERATURELIMIT = 40
-SLEEP = 5
+HIGHTEMPERATURELIMIT = 25
 
+laser = serial.Serial('COM5', timeout=3)
 
 ### Create object
 root = Tk()
@@ -21,7 +22,7 @@ root.title("Laser GUI")
 ### Dimension
 root.geometry("800x600")
 
-is_on = False
+is_on = True
 
 ### Create label + button
 my_label = Label(root, text="The laser is OFF", font=("Helvetica", 14))
@@ -36,11 +37,17 @@ def switch():
         on_button.config(image=off)
         my_label.config(text="The laser is OFF")
         # TURN LASER OFF THRUGH COMMAND
+        laser.write("loff\r\n".encode())
+        off_label = Label(root, text=laser.readline().decode("utf-8"), font=("Helvetica", 14))
+        off_label.grid(row=6, column=0)
         is_on = False
     else:
         on_button.config(image=on)
         my_label.config(text="The laser is ON")
         # TURN LASER ON THRUGH COMMAND
+        laser.write("lon\r\n".encode())
+        on_label = Label(root, text=laser.readline().decode("utf-8"), font=("Helvetica", 14))
+        on_label.grid(row=7, column=0)
         is_on = True
 
 
@@ -54,39 +61,42 @@ on_button.grid(row=1, column=0)
 ##########################################################################################################
 
 ### Create label
-my_power = Label(root, text="Insert power", font=("Helvetica", 14))
-my_power.grid(row=2, column=0)
+my_current = Label(root, text="Insert current", font=("Helvetica", 14))
+my_current.grid(row=2, column=0)
 my_mA = Label(root, text="mA", font=("Helvetica", 14))
 my_mA.grid(row=2, column=2)
 
 ### Create edit text
-power_text = Entry(root, width=10)
-power_text.grid(row=2, column=1)
+current_text = Entry(root, width=10)
+current_text.grid(row=2, column=1)
 
-### Check if power is a good number
+### Check if current is a good number
 # Create error label
-power_err = Label(root, font=("Helvetica", 14))
-power_err.grid(row=2, column=4)
+current_err = Label(root, font=("Helvetica", 14))
+current_err.grid(row=2, column=4)
 
 
-def check_power():
+def check_current():
     if is_on == False:
-        power_err.config(text="The laser is OFF")
+        current_err.config(text="The laser is OFF")
         return
     try:
-        power = int(power_text.get())
-        if power < LOWPOWERLIMIT or power > HIGHPOWERLIMIT:
+        current = float(current_text.get())
+        print(current_text.get())
+        if current < LOWCURRENTLIMIT or current > HIGHCURRENTLIMIT:
             raise ValueError
     except ValueError:
-        power_err.config(text="Insert a valid number!")
+        current_err.config(text="Insert a valid number!")
     else:
-        power_err.config(text="Power set!")
-        # SET LASER POWER THRUGH COMMAND
+        current_err.config(text="Current set!")
+        # SET LASER current THRUGH COMMAND
+        laser.write(("slc:"+current_text.get()+"\r\n").encode())
+        laser.readline().decode("utf-8")
 
 
 ### Create set button
-set_power = Button(root, text="Set", command=check_power)
-set_power.grid(row=2, column=3)
+set_current = Button(root, text="Set", command=check_current)
+set_current.grid(row=2, column=3)
 ##########################################################################################################
 
 ### Create label
@@ -110,7 +120,7 @@ def check_temp():
         temp_err.config(text="The laser is OFF")
         return
     try:
-        temp = int(temp_text.get())
+        temp = float(temp_text.get())
         if temp < LOWTEMPERATURELIMIT or temp > HIGHTEMPERATURELIMIT:
             raise ValueError
     except ValueError:
@@ -118,6 +128,8 @@ def check_temp():
     else:
         temp_err.config(text="Temperature set!")
         # SET LASER TEMPERATURE THRUGH COMMAND
+        laser.write(("stt:"+temp_text.get()+"\r\n").encode())
+        laser.readline().decode("utf-8")
 
 
 # Create set button
@@ -125,13 +137,23 @@ set_temp = Button(root, text="Set", command=check_temp)
 set_temp.grid(row=3, column=3)
 ##########################################################################################################
 
-### GET LASER CURRENT POWER THRUGH COMMAND
-my_current_temp = Label(root, text="Current power: ", font=("Helvetica", 14))
-my_current_temp.grid(row=4, column=0)
+### GET LASER CURRENT CURRENT THRUGH COMMAND
+def getCurrent():
+    laser.write("rli?\r\n".encode())
+    my_actual_temp = Label(root, text="Actual current: " + laser.readline().decode("utf-8") , font=("Helvetica", 14))
+    my_actual_temp.grid(row=4, column=1)
+
+get_current = Button(root, text="Get current", command=getCurrent)
+get_current.grid(row=4, column=0)
 
 ### GET LASER CURRENT TEMPERATURE THRUGH COMMAND
-my_current_temp = Label(root, text="Current temperature: ", font=("Helvetica", 14))
-my_current_temp.grid(row=5, column=0)
+def getTemp():
+    laser.write("rtt?\r\n".encode())
+    my_current_temp = Label(root, text="Actual temperature: " + laser.readline().decode("utf-8"), font=("Helvetica", 14))
+    my_current_temp.grid(row=5, column=1)
+
+get_temp = Button(root, text="Actual temperature", command=getTemp)
+get_temp.grid(row=5, column=0)
 
 
 ### Execute
