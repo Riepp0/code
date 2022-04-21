@@ -1,9 +1,9 @@
-from asyncore import write
 from distutils.command.config import config
 from tkinter import *
-from tkinter.ttk import *
-from PIL import Image, ImageFont, ImageDraw, ImageTk
-import glob, os, serial
+from serial import *
+from PIL import *
+from laserLib import *
+
 
 
 LOWCURRENTLIMIT = 40
@@ -11,7 +11,7 @@ HIGHCURRENTLIMIT = 50
 LOWTEMPERATURELIMIT = 20
 HIGHTEMPERATURELIMIT = 25
 
-laser = serial.Serial('COM5', timeout=3)
+laser = LaserBox()
 
 ### Create object
 root = Tk()
@@ -37,7 +37,7 @@ def switch():
         on_button.config(image=off)
         my_label.config(text="The laser is OFF")
         # TURN LASER OFF THRUGH COMMAND
-        laser.write("loff\r\n".encode())
+        laser.powerOff()
         off_label = Label(root, text=laser.readline().decode("utf-8"), font=("Helvetica", 14))
         off_label.grid(row=6, column=0)
         is_on = False
@@ -45,7 +45,7 @@ def switch():
         on_button.config(image=on)
         my_label.config(text="The laser is ON")
         # TURN LASER ON THRUGH COMMAND
-        laser.write("lon\r\n".encode())
+        laser.powerOn()
         on_label = Label(root, text=laser.readline().decode("utf-8"), font=("Helvetica", 14))
         on_label.grid(row=7, column=0)
         is_on = True
