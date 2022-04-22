@@ -24,8 +24,9 @@ my_label.grid(row=0, column=0, columnspan=1)
 
 ### Create A Button (SWitch)
 on_button = Button(root, image=off)
-on_button.config(command=laser.switch(on_button, my_label))
+on_button.config(command=laser.switch(is_on, on_button, my_label))
 on_button.grid(row=1, column=0)
+
 ##########################################################################################################
 
 ### Create label
@@ -45,6 +46,7 @@ current_err.grid(row=2, column=4)
 ### Create set button
 set_current = Button(root, text="Set", command=laser.checkCurrent(is_on, current_err, current_text))
 set_current.grid(row=2, column=3)
+
 ##########################################################################################################
 
 ### Create label

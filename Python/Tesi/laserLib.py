@@ -2,24 +2,24 @@ from tkinter import *
 from serial import *
 from PIL import *
 
+laser = None
+
+### Images
+on = PhotoImage(file=r"C:\Users\miche\source\vscode\code\Python\Tesi\on.png")
+off = PhotoImage(file=r"C:\Users\miche\source\vscode\code\Python\Tesi\off.png")
+
 class LaserBox:
     """ Creating a laser class """
 
-    global laser, on, off
 
-    ### Images
-    on = PhotoImage(file=r"C:\Users\miche\source\vscode\code\Python\Tesi\on.png")
-    off = PhotoImage(file=r"C:\Users\miche\source\vscode\code\Python\Tesi\off.png")
-
-
-    def __init__() -> None:
+    def __init__():
         """ Initialize laser """
 
         laser = Serial("COM5", timeout=3)  
     
     def powerOn():
         """ Power on laser """
-
+        
         laser.write("lon\r\n".encode())
         laser.readline().decode("utf-8")
 
@@ -29,8 +29,11 @@ class LaserBox:
         laser.write("loff\r\n".encode())
         laser.readline().decode("utf-8")
     
-    def switch(on_button, my_label):
-        """ Switch laser ON/OFF """
+    def switch(is_on, on_button, my_label):
+        """ Switch laser ON/OFF,
+            @param is_on: boolean
+            @param on_button: button
+            @param my_label: label"""
 
         if is_on:
             on_button.config(image=off)
@@ -46,33 +49,40 @@ class LaserBox:
             is_on = True
 
     def setCurrent(current):
-        """ Set current through serial command """
+        """ Set current through serial command 
+            @param current: float """
 
         laser.write(("slc:"+current+"\r\n").encode())
         laser.readline().decode("utf-8")
 
     def setTemp(temp):
-        """ Set temperature through serial command """
+        """ Set temperature through serial command 
+            @param temp: float """
 
         laser.write(("stt:"+temp+"\r\n").encode())
         laser.readline().decode("utf-8")
     
     def getCurrent(root):
-        """ Get current through serial command """
+        """ Get current through serial command 
+            @param root: tkinter root """
 
         laser.write("rli?\r\n".encode())
         my_actual_temp = Label(root, text="Actual current: " + laser.readline().decode("utf-8") , font=("Helvetica", 14))
         my_actual_temp.grid(row=4, column=1)
 
     def getTemp(root):
-        """ Get temperature through serial command """
+        """ Get temperature through serial command 
+            @param root: tkinter root """
 
         laser.write("rtt?\r\n".encode())
         my_current_temp = Label(root, text="Actual temperature: " + laser.readline().decode("utf-8"), font=("Helvetica", 14))
         my_current_temp.grid(row=5, column=1)
     
     def checkCurrent(is_on, current_err, current_text):
-        """ Check if current is a valid number """
+        """ Check if current is a valid number 
+            @param is_on: boolean
+            @param current_err: label
+            @param current_text: entry """
 
         if is_on == False:
             current_err.config(text="The laser is OFF")
@@ -88,7 +98,10 @@ class LaserBox:
             laser.setCurrent(current)
 
     def checkTemp(is_on, temp_err, temp_text):
-        """ Check if temperature is a valid number """
+        """ Check if temperature is a valid number 
+            @param is_on: boolean
+            @param temp_err: label
+            @param temp_text: entry """
 
         if is_on == False:
             temp_err.config(text="The laser is OFF")
