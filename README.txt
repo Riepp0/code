@@ -1,3 +1,3 @@
 #Code readme
 
-Cartella generale di codice relativo ad esercizi di C,C++,Java,Python,GO...
+General projects folder of Java, C, C++, Python, GO
