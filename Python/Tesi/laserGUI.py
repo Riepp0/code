@@ -1,6 +1,5 @@
 from tkinter import *
 from serial import *
-from PIL import *
 from laserLib import *
 
 
@@ -15,13 +14,15 @@ root.title("Laser GUI")
 ### Dimension
 root.geometry("800x600")
 
-is_on = True
+is_on = False
 
 ### Create label + button
 my_label = Label(root, text="The laser is OFF", font=("Helvetica", 14))
 my_label.grid(row=0, column=0, columnspan=1)
 
 def switch():
+    global is_on
+
     """ Switch laser ON/OFF """
 
     if is_on:
@@ -43,7 +44,7 @@ off = PhotoImage(file=r"C:\Users\miche\source\vscode\code\Python\Tesi\off.png")
 
 ### Create A Button (SWitch)
 on_button = Button(root, image=off)
-on_button.config(command=switch())
+on_button.config(command=switch)
 on_button.grid(row=1, column=0)
 
 ##########################################################################################################
@@ -79,7 +80,7 @@ def checkCurrent():
         print(laser.setCurrent(current))
 
 ### Create set button
-set_current = Button(root, text="Set", command=checkCurrent())
+set_current = Button(root, text="Set", command=checkCurrent)
 set_current.grid(row=2, column=3)
 
 ##########################################################################################################
@@ -115,40 +116,66 @@ def checkTemp():
         print(laser.setTemp(temp))
 
 # Create set button
-set_temp = Button(root, text="Set", command=checkTemp())
+set_temp = Button(root, text="Set", command=checkTemp)
 set_temp.grid(row=3, column=3)
 ##########################################################################################################
 
 # Get current
-get_current = Button(root, text="Get current", command=laser.getCurrent())
-my_actual_temp = Label(root, text="Actual current: " + print(laser.readLine()), font=("Helvetica", 14))
-my_actual_temp.grid(row=4, column=1)
+my_actual_current = Label(root, text="Actual current: ", font=("Helvetica", 14))
+def keepCurrent():
+    """ Keep current """
+    current = laser.getCurrent()
+    my_actual_current.config(text="Actual current: " + current)
+
+get_current = Button(root, text="Get current", command=keepCurrent)
+my_actual_current.grid(row=4, column=1)
 get_current.grid(row=4, column=0)
+   
 
 # Get temperature
+my_actual_temp = Label(root, text="Actual temperature: ", font=("Helvetica", 14))
+def keepTemp():
+    """ Keep temperature """
+    temp = laser.getTemp()
+    my_actual_temp.config(text="Actual temperature: " + temp)
 
-get_temp = Button(root, text="Actual temperature", command=laser.getTemp())
-my_current_temp = Label(root, text="Actual temperature: " + print(laser.readLine()), font=("Helvetica", 14))
-my_current_temp.grid(row=5, column=1)
+get_temp = Button(root, text="Actual temperature", command=keepTemp)
+my_actual_temp.grid(row=5, column=1)
 get_temp.grid(row=5, column=0)
 
 # Get system power
-get_power = Button(root, text="System power", command=laser.getPower())
-my_power = Label(root, text="System power: " + print(laser.readLine()), font=("Helvetica", 14))
+my_power = Label(root, text="Actual system power: ", font=("Helvetica", 14))
+def keepPower():
+    """ Keep system power """
+    power = laser.getPower()
+    my_power.config(text="Actual system power: " + power)
+
+get_power = Button(root, text="System power", command=keepPower)
 my_power.grid(row=6, column=1)
 get_power.grid(row=6, column=0)
 
 # Get system firmware version
-get_firmware = Button(root, text="Firmware version", command=laser.getSystemFirmware())
-my_firmware = Label(root, text="Firmware version: " + print(laser.readLine()), font=("Helvetica", 14))
+my_firmware = Label(root, text="Actual system firmware version: ", font=("Helvetica", 14))
+def keepFirmware():
+    """ Keep system firmware version """
+    firmware = laser.getSystemFirmware()
+    my_firmware.config(text="Actual system firmware version: " + firmware)
+
+get_firmware = Button(root, text="Firmware version", command=keepFirmware)
 my_firmware.grid(row=7, column=1)
 get_firmware.grid(row=7, column=0)
 
 # Get system serial number
-get_serial = Button(root, text="Serial number", command=laser.getSerialNumber())
-my_serial = Label(root, text="Serial number: " + print(laser.readLine()), font=("Helvetica", 14))
+my_serial = Label(root, text="Actual system serial number: ", font=("Helvetica", 14))
+def keepSerial():
+    """ Keep system serial number """
+    serial = laser.getSerialNumber()
+    my_serial.config(text="Actual system serial number: " + serial)
+
+get_serial = Button(root, text="Serial number", command=keepSerial)
 my_serial.grid(row=8, column=1)
 get_serial.grid(row=8, column=0)
+
 
 ### Execute
 root.mainloop()

@@ -24,7 +24,16 @@ class LaserBox:
     def setCurrent(self,current):
         """ Set current through serial command 
             @param current: float """
-
+        print(isinstance(current, float) or isinstance(current, int))
+        if isinstance(current, float) or isinstance(current, int):
+            current = '{0:.4f}'.format(current)
+        else:
+            try:
+                current = float(current)
+                if current < 40 or current > 50:
+                    raise ValueError
+            except ValueError:
+                print("Insert a valid number!")
         self.laser.write(("slc:"+current+"\r\n".encode()))
         return self.readLine()
 
@@ -32,6 +41,16 @@ class LaserBox:
         """ Set temperature through serial command 
             @param temp: float """
 
+        print(isinstance(temp, float) or isinstance(temp, int))
+        if isinstance(temp, float) or isinstance(temp, int):
+            temp = '{0:.4f}'.format(temp)
+        else:
+            try:
+                temp = float(temp)
+                if temp < 20 or temp > 25:
+                    raise ValueError
+            except ValueError:
+                print("Insert a valid number!")
         self.laser.write(("stt:"+temp+"\r\n".encode()))
         return self.readLine()
     
@@ -45,6 +64,7 @@ class LaserBox:
         """ Get temperature through serial command """
 
         self.laser.write("rtt?\r\n".encode())
+        return self.readLine()
 ######################################################
     def getPower(self):
         """ Get power status """
