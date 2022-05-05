@@ -21,6 +21,7 @@ def max_degree(grafo):
     else:
         return "Tipo di dato non valido"
 
+
 def ampiezza(grafo, start, end):
     """    Funzione che calcola l'ampiezza del grafo da start ad end"""
     if isinstance(grafo, nx.Graph) and grafo != None:
@@ -30,15 +31,15 @@ def ampiezza(grafo, start, end):
             if start == end:
                 return [start]
             else:
-                visited = []
+                list = []
                 queue = [start]
                 while queue:
                     nodo = queue.pop()
-                    visited.append(nodo)
+                    list.append(nodo)
                     for neighbors in grafo.neighbors(nodo):
-                        if neighbors not in visited and neighbors not in queue:
+                        if neighbors not in list and neighbors not in queue:
                             queue.append(neighbors)
-                return visited
+                return list
             
         return "Nodo non presente nel grafo"
     return "Tipo di dato non valido"
