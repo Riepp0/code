@@ -8,9 +8,9 @@ class Spectro():
 
     def __init__(self):
         """Initialize spectrometer"""
-        self.spectrometer = Spectrometer.from_serial_number("")
+        self.spectrometer = Spectrometer.from_first_available()
 
-    def printDevices():
+    def printDevices(self):
         """Print devices"""
         print(list_devices())
 
@@ -37,4 +37,15 @@ class Spectro():
     def plotSpectrum(self):
         """Plot spectrum"""
         plt.plot(self.getWaveLength(), self.getIntensities())
+        plt.xlabel('Wavelength (nm)')
+        plt.ylabel('Intensity')
         plt.show()
+
+    def isSaturated(self):
+        """Check if spectrum is saturated"""
+        if max(self.getIntensities()) > 0.9 * self.spectrometer.max_intensity:
+            print(max(self.getIntensities()))
+            return True
+        else:
+            return False
+
