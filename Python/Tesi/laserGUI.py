@@ -1,5 +1,4 @@
 from tkinter import *
-from serial import *
 from laserLib import *
 
 

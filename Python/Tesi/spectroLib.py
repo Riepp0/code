@@ -17,7 +17,17 @@ class Spectro():
     def setIntegrationTime(self, time):
         """Set integration time
             @param time: int """
+        if isinstance(time, int) or isinstance(time, float):
+            time = '{0:.4f}'.format(time)
+        else:
+            try:
+                time = float(time)
+                if time < 1000 or time > 20000:
+                    raise ValueError
+            except ValueError:
+                    print("Insert a valid number!")
         self.spectrometer.integration_time_micros(time)
+        
 
     def getWaveLength(self):
         """Get wavelength
@@ -33,13 +43,6 @@ class Spectro():
         """Get spectrum
             @return: list """
         return self.spectrometer.spectrum()
-
-    def plotSpectrum(self):
-        """Plot spectrum"""
-        plt.plot(self.getWaveLength(), self.getIntensities())
-        plt.xlabel('Wavelength (nm)')
-        plt.ylabel('Intensity')
-        plt.show()
 
     def isSaturated(self):
         """Check if spectrum is saturated"""
