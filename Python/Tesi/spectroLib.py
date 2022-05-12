@@ -1,7 +1,7 @@
+from tkinter import Label
 import seabreeze
 seabreeze.use('pyseabreeze')
 from seabreeze.spectrometers import list_devices, Spectrometer
-from matplotlib import pyplot as plt
 
 class Spectro():
     """Creating a Spectrometer class"""
@@ -14,19 +14,26 @@ class Spectro():
         """Print devices"""
         print(list_devices())
 
-    def setIntegrationTime(self, time):
+    def getSpectrometer(self):
+        """Get spectrometer"""
+        return self.spectrometer
+
+    def setIntegrationTime(self, time, label : Label):
         """Set integration time
             @param time: int """
-        if isinstance(time, int) or isinstance(time, float):
-            time = '{0:.4f}'.format(time)
-        else:
+        if (not(isinstance(time, int))):
             try:
-                time = float(time)
-                if time < 1000 or time > 20000:
+                time = int(time)
+                if not(isinstance(time, int)):
                     raise ValueError
             except ValueError:
-                    print("Insert a valid number!")
-        self.spectrometer.integration_time_micros(time)
+                label.config(text="Insert a valid number!")
+                return
+        if time < 1000 or time > 20000:
+            label.config(text="Insert a valid value!")
+        else:
+            self.spectrometer.integration_time_micros(time)
+            label.config(text="Time set!")
         
 
     def getWaveLength(self):
