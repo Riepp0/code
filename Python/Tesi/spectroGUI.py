@@ -1,8 +1,6 @@
 from spectroLib import *
 from tkinter import *
-import numpy as np
-import pyqtgraph as pg
-from PyQt5 import QtCore, QtGui
+
 
 spectro = Spectro()
 
@@ -38,10 +36,9 @@ my_integration_button = Button(root, text="Set integration time", command=lambda
 my_integration_button.grid(row=1, column=1)
 
 def myPlot():
-    x = spectro.getWaveLength()
-    y = spectro.getIntensities()
-    graph = pg.GraphicsLayoutWidget(title="Spectrum")
-    graph.resize(800, 600)
+    app = QtWidgets.QApplication(sys.argv)
+    w = MainWindow()
+    app.exec_()
     
 
 ### Create spectrum button
