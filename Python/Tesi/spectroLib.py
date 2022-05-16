@@ -1,20 +1,20 @@
 
 from tkinter import Label
 from matplotlib import pyplot as plt
+from matplotlib.lines import Line2D
 
 import seabreeze
 seabreeze.use('pyseabreeze')
 from seabreeze.spectrometers import list_devices, Spectrometer
 
+
 import sys
-import numpy as np
 import matplotlib
 matplotlib.use('Qt5Agg')
 
-from PyQt5 import QtCore, QtWidgets, QtGui
+from PyQt5 import QtCore, QtWidgets
 
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.figure import Figure
 
 class Spectro():
     """Creating a Spectrometer class"""
@@ -75,8 +75,7 @@ class Spectro():
 class MplCanvas(FigureCanvas):
 
     def __init__(self, parent=None, width=5, height=4, dpi=100):
-        fig = Figure(figsize=(width, height), dpi=dpi)
-        self.axes = fig.add_sublot(111)
+        fig, self.ax = plt.subplots()
         super(MplCanvas, self).__init__(fig)
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -92,7 +91,9 @@ class MainWindow(QtWidgets.QMainWindow):
         n_data = max(Spectro.getWaveLength)
         self.xdata = list(range(n_data))
         self.ydata = Spectro.getIntensities()
-        self.update()
+
+        self._plot_ref = None
+        self.update_plot()
 
         self.show()
 
@@ -103,4 +104,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self.timer.start()
 
     def update_plot(self):
-        None
+        self.ydata = self.ydata[1:] + Spectro.getIntensities()[0]
+        if self._plot_ref is None:
+            self._plot_ref, = self.canvas.ax.plot(self.xdata, self.ydata)
+        else:
+            self._plot_ref = self.ydata
+        self.canvas.draw()
