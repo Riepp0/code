@@ -1,49 +1,62 @@
-from constraint import * 
-import networkx as nx
+import numpy as np
+import pandas as pd
 
-def sistema3():
-    problem = Problem()
+def compute_cost(X, y, theta):
+  squared_error = np.power(((X * theta.T) - y), 2)
+  return np.sum(squared_error) / (2 * len(X))
 
-    problem.addVariable('x', [13,12,34])
-    problem.addVariable('y', [40,57,76])
-    problem.addVariable('z', [6,8,20])
-    
-    problem.addConstraint(lambda a,b: a < b, ('x', 'y'))
-    problem.addConstraint(lambda a,b,c: a + b + c < 65, ('x', 'y', 'z'))
+def train(X, y, theta, alpha, iters):
+  temp = np.matrix(np.zeros(theta.shape))
+  params = int(theta.ravel().shape[1])
+  cost = np.zeros(iters)
 
-    return problem.getSolution()
+  for i in range(iters):
+    error = (X * theta.T) - y
+    for j in range(params):
+      term = np.multiply(error, X[:,j])
+      temp[0,j] = theta[0,j] - ((alpha / len(X)) * np.sum(term))
+    theta = temp
+    cost[i] = compute_cost(X, y, theta)
 
-def grafo_vincoli(grafo : nx.Graph):
-    if grafo.number_of_nodes() == 0:
-        return {}
-    domain = {"rosso","verde","blu"}
-    problem = Problem()
-    list = []
-    for i in grafo.nodes():
-        if(not(i in list)):
-            problem.addVariable(i, domain)
-        neighbors = grafo.neighbors(i)
-        for j in neighbors:
-            if(not(j in list)) and not (neighbors in list):
-                problem.addConstraint(lambda a,b: a != b, (i,j))
-    return problem.getSolution()
+  return theta, cost
 
-def nqueens(n):
-    problem = Problem()
-    cols = range(0,n)	# variables
-    rows = range(0,n)	# domains
-    problem.addVariables(cols, rows)
+def linear_regr(dataset, value):
+  alpha = 0.01
+  iters = 1000
+  try:
+    data = pd.read_csv(dataset, header=None, names=["Population", "Profit"])
+  except FileNotFoundError:
+    return None
 
-    # queen loops and constraints
-    for col1 in cols:
-        for col2 in cols:
-            if col1 < col2:
-                problem.addConstraint(lambda row1, row2, col1=col1, col2=col2:
-                    # diagonal check
-                    abs(row1-row2) != abs(col1-col2) and
-                    # horizontal check	
-                    row1 != row2, (col1, col2))				
+  data.insert(0, "Ones", 1)
 
-    return problem.getSolution()
+  cols = data.shape[1]
+  X = data.iloc[:, 0:cols-1]
+  y = data.iloc[:, cols-1:cols]
 
-#print(nqueens(5))
+  X = np.matrix(X.values)
+  y = np.matrix(y.values)
+  theta = np.matrix(np.array([0, 0]))
+
+  theta, _ = train(X, y, theta, alpha, iters)
+  output = np.matrix([1, value]) * theta.T
+  
+  return float(output)
+
+def vertical_stack(a,b):
+    if len(a) != len(b):
+        return None
+    else:
+        return np.vstack((a,b))
+
+def match(a,b):
+    if len(a) != len(b):
+        return None
+    else:
+        ret = []
+        for i in range(len(a)):
+            if a[i] == b[i]:
+                ret.append(i)
+        return ret
+
+print(linear_regr("day_mod.csv",0.22))
