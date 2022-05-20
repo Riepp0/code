@@ -1,20 +1,16 @@
 
 from tkinter import Label
-from matplotlib import pyplot as plt
-from matplotlib.lines import Line2D
+
 
 import seabreeze
 seabreeze.use('pyseabreeze')
 from seabreeze.spectrometers import list_devices, Spectrometer
 
+import pyqtgraph as pg
+from pyqtgraph.Qt import QtCore, QtGui
+from pyqtgraph.ptime import time
 
-import sys
-import matplotlib
-matplotlib.use('Qt5Agg')
-
-from PyQt5 import QtCore, QtWidgets
-
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+import numpy as np
 
 class Spectro():
     """Creating a Spectrometer class"""
@@ -72,41 +68,24 @@ class Spectro():
         else:
             return False
 
-class MplCanvas(FigureCanvas):
 
-    def __init__(self, parent=None, width=5, height=4, dpi=100):
-        fig, self.ax = plt.subplots()
-        super(MplCanvas, self).__init__(fig)
+    def upgrade(self):
+        global x,y,curve
 
-class MainWindow(QtWidgets.QMainWindow):
+        x = self.getWaveLength()
+        y = self.getIntensities()
+        curve.setData(x,y)
 
-    def __init__(self, *args, **kwargs):
-        super(MainWindow, self).__init__(*args, **kwargs)
+    def plotSpectrum(self):
+        plot = pg.GraphicsWindow()
 
-        # Create the maptlotlib FigureCanvas object,
-        # which defines a single set of axes as self.axes.
-        self.canvas = MplCanvas(self, width=5, height=4, dpi=100)
-        self.setCentralWidget(self.canvas)
-        
-        n_data = max(Spectro.getWaveLength)
-        self.xdata = list(range(n_data))
-        self.ydata = Spectro.getIntensities()
+        p1 = plot.addPlot()
+        x = np.zeros(len(self.getWaveLength()))
+        y = np.zeros(len(self.getIntensities()))
+        curve = p1.plot(x, y, pen = pg.mkPen('r'))
 
-        self._plot_ref = None
-        self.update_plot()
+        timer = pg.QtCore.QTimer()
+        timer.timeout.connect(self.upgrade)
+        timer.start(1000)
 
-        self.show()
-
-        # Setup a timer to trigger the redraw of the plot
-        self.timer = QtCore.QTimer()
-        self.timer.setInterval(100)
-        self.timer.timeout(self.update)
-        self.timer.start()
-
-    def update_plot(self):
-        self.ydata = self.ydata[1:] + Spectro.getIntensities()[0]
-        if self._plot_ref is None:
-            self._plot_ref, = self.canvas.ax.plot(self.xdata, self.ydata)
-        else:
-            self._plot_ref = self.ydata
-        self.canvas.draw()
+    

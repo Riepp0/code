@@ -35,15 +35,10 @@ my_time_set.grid(row=1, column=2)
 my_integration_button = Button(root, text="Set integration time", command=lambda: spectro.setIntegrationTime(my_integration_entry.get(), my_time_set))
 my_integration_button.grid(row=1, column=1)
 
-def myPlot():
-    app = QtWidgets.QApplication(sys.argv)
-    w = MainWindow()
-    app.exec_()
-    
-
 ### Create spectrum button
-my_spectrum_button = Button(root, text="Get spectrum", command=myPlot)
+my_spectrum_button = Button(root, text="Get spectrum", command=spectro.plotSpectrum)
 my_spectrum_button.grid(row=2, column=0)
+
 
 root.mainloop()
 
