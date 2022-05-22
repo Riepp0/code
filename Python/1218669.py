@@ -62,4 +62,4 @@ def match(a,b):
                 ret.append(i)
         return ret
 
-print(linear_regr("day_mod.csv",0.22))
+print(linear_regr("Python/day_mod.csv",0.22))
