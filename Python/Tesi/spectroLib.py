@@ -75,7 +75,7 @@ class Spectro():
         curve = pg.PlotItem.plot(curve,x,y)
 
     def plotSpectrum(self):
-        
+        global x,y,curve
         app = QApplication([])
 
         x = np.zeros(len(self.getWaveLength()))
