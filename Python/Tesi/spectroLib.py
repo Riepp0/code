@@ -1,4 +1,4 @@
-
+import sys
 from tkinter import Label
 
 
@@ -7,7 +7,7 @@ seabreeze.use('pyseabreeze')
 from seabreeze.spectrometers import list_devices, Spectrometer
 
 import pyqtgraph as pg
-from pyqtgraph.Qt import QtCore, QtGui
+from PyQt5.QtWidgets import QApplication
 from pyqtgraph.ptime import time
 
 import numpy as np
@@ -68,24 +68,30 @@ class Spectro():
         else:
             return False
 
-
     def upgrade(self):
-        global x,y,curve
 
         x = self.getWaveLength()
+        print(x)
         y = self.getIntensities()
+        print(y)
         curve.setData(x,y)
 
     def plotSpectrum(self):
+        global x,y,curve
+        app = QApplication([])
         plot = pg.GraphicsWindow()
 
         p1 = plot.addPlot()
         x = np.zeros(len(self.getWaveLength()))
         y = np.zeros(len(self.getIntensities()))
-        curve = p1.plot(x, y, pen = pg.mkPen('r'))
+        print(x)
+        curve = p1.plot(x, y, pen = None, symbol = 'o')
+
+        app.exec()
 
         timer = pg.QtCore.QTimer()
         timer.timeout.connect(self.upgrade)
         timer.start(1000)
+
 
     
