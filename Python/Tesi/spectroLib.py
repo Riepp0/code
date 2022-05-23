@@ -69,23 +69,18 @@ class Spectro():
             return False
 
     def upgrade(self):
-
+        global x,y,curve
         x = self.getWaveLength()
-        print(x)
         y = self.getIntensities()
-        print(y)
-        curve.setData(x,y)
+        curve = pg.PlotItem.plot(curve,x,y)
 
     def plotSpectrum(self):
-        global x,y,curve
+        
         app = QApplication([])
-        plot = pg.GraphicsWindow()
 
-        p1 = plot.addPlot()
         x = np.zeros(len(self.getWaveLength()))
         y = np.zeros(len(self.getIntensities()))
-        print(x)
-        curve = p1.plot(x, y, pen = None, symbol = 'o')
+        curve = pg.plot(x, y, pen = None, symbol = 'o')
 
         app.exec()
 
