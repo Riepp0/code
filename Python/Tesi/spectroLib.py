@@ -82,11 +82,13 @@ class Spectro():
         y = np.zeros(len(self.getIntensities()))
         curve = pg.plot(x, y, pen = None, symbol = 'o')
 
-        app.exec()
-
         timer = pg.QtCore.QTimer()
         timer.timeout.connect(self.upgrade)
         timer.start(1000)
+        
+        app.exec()
+
+        
 
 
     
