@@ -1,4 +1,3 @@
-import sys
 from tkinter import Label
 
 
@@ -43,7 +42,10 @@ class Spectro():
         else:
             self.spectrometer.integration_time_micros(time)
             label.config(text="Time set!")
-        
+
+    def getIntegrationTime(self):
+        """Get integration time"""
+        return self.spectrometer.integration_time_micros()        
 
     def getWaveLength(self):
         """Get wavelength
