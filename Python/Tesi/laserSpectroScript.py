@@ -1,5 +1,6 @@
 from spectroLib import *
-from laserLib import * 
+from laserLib import *
+import pandas as pd
 
 # Create laser object
 laser = LaserBox()
@@ -11,10 +12,6 @@ laser.powerOn()
 print(laser.getCurrent())
 print(laser.getTemp())
 
-# Set laser states <-------------------------------------------------------------
-laser.setCurrent(60)
-laser.setTemp(20)
-
 # Create spectrometer object
 spectro = Spectro()
 
@@ -24,15 +21,23 @@ spectro.printDevices()
 # Set the spectrometer integration time <-----------------------------------------
 spectro.setIntegrationTimeScript(10000000)
 
+# Set laser states
+# Check if spectrometer is saturated
+# If not, set the laser power to the desired value
+# If yes, do not save the file and print a warning
+for current in range(40,60):
+    for temp in range (20,30):
+        laser.setCurrent(current)
+        laser.setTemp(temp)
+        if spectro.isSaturated():
+            print("Saturated")
+        else:
+            tmp = spectro.getSpectrum()
+            df = pd.DataFrame(tmp)
+            total = str(current * temp)
+            df.to_csv("laserSpectroScript"+"total.csv")
 
 
-# Get the spectrometer spectrum
-# But before check if it is saturated
-i = 0
-while(i < 10):
-    print(spectro.getSpectrum()[1,200])
-    i += 1
-spectro.terminate()
 
 
 # !Now plot the spectrum!
