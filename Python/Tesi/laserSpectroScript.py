@@ -12,7 +12,7 @@ print(laser.getCurrent())
 print(laser.getTemp())
 
 # Set laser states <-------------------------------------------------------------
-laser.setCurrent(40)
+laser.setCurrent(60)
 laser.setTemp(20)
 
 # Create spectrometer object
@@ -21,22 +21,23 @@ spectro = Spectro()
 # Get active spectrometer
 spectro.printDevices()
 
-# Get the spectrometer integration time
-print(spectro.getIntegrationTime())
-
 # Set the spectrometer integration time <-----------------------------------------
-spectro.setIntegrationTime(10000)
+spectro.setIntegrationTimeScript(10000000)
+
+
 
 # Get the spectrometer spectrum
 # But before check if it is saturated
-if spectro.isSaturated():
-    print("Saturated!")
-else:
-    print(spectro.getSpectrum())
+i = 0
+while(i < 10):
+    print(spectro.getSpectrum()[1,200])
+    i += 1
+spectro.terminate()
+
 
 # !Now plot the spectrum!
-spectro.plotSpectrum()
+#spectro.plotSpectrum()
 
 
 # Power off the laser
-laser.powerOff()
+#laser.powerOff()

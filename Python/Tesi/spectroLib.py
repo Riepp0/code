@@ -1,6 +1,7 @@
 from tkinter import Label
 
-
+import functools
+from pyparsing import line
 import seabreeze
 seabreeze.use('pyseabreeze')
 from seabreeze.spectrometers import list_devices, Spectrometer
@@ -21,6 +22,9 @@ class Spectro():
     def printDevices(self):
         """Print devices"""
         print(list_devices())
+
+    def terminate(self):
+        self.spectrometer.close()
 
     def getSpectrometer(self):
         """Get spectrometer"""
@@ -43,9 +47,9 @@ class Spectro():
             self.spectrometer.integration_time_micros(time)
             label.config(text="Time set!")
 
-    def getIntegrationTime(self):
-        """Get integration time"""
-        return self.spectrometer.integration_time_micros()        
+    def setIntegrationTimeScript(self,time):
+        """Set integration time"""
+        return self.spectrometer.integration_time_micros(time)        
 
     def getWaveLength(self):
         """Get wavelength
@@ -70,22 +74,35 @@ class Spectro():
         else:
             return False
 
-    def upgrade(self):
-        global x,y,curve
+    def upgrade(self, params):
+        curve = params[0]
+        line = params[1]
         x = self.getWaveLength()
         y = self.getIntensities()
-        curve = pg.PlotItem.plot(curve,x,y)
+        curve.setXRange(min(x), max(x))
+        curve.setYRange(min(y), max(y))
+        line.setData(x=x, y=y)
+        
+        
+        
 
     def plotSpectrum(self):
-        global x,y,curve
         app = QApplication([])
 
-        x = np.zeros(len(self.getWaveLength()))
-        y = np.zeros(len(self.getIntensities()))
-        curve = pg.plot(x, y, pen = None, symbol = 'o')
+        curve = pg.plot()
+        curve.showGrid(x = True, y = True)
+
+        x = self.getWaveLength()
+        y = self.getIntensities()
+        curve.setXRange(min(x), max(x))
+        curve.setYRange(min(y), max(y))
+        line = curve.plot(x,y, pen ='g', symbol ='x', symbolPen ='g',
+                           symbolBrush = 0.2, name ='green')
+
+        callBack = functools.partial(self.upgrade, params = [curve,line])
 
         timer = pg.QtCore.QTimer()
-        timer.timeout.connect(self.upgrade)
+        timer.timeout.connect(callBack)
         timer.start(1000)
         
         app.exec()

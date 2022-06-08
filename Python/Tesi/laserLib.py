@@ -7,7 +7,7 @@ class LaserBox:
     def __init__(self):
         """ Initialize laser """
 
-        self.laser = Serial("COM5", timeout=3) 
+        self.laser = Serial("COM6", timeout=3) 
     
     def powerOn(self):
         """ Power on laser """
@@ -34,7 +34,8 @@ class LaserBox:
                     raise ValueError
             except ValueError:
                 print("Insert a valid number!")
-        self.laser.write(("slc:"+current+"\r\n".encode()))
+        tmp = "slc:"+current+"\r\n"
+        self.laser.write(tmp.encode())
         return self.readLine()
 
     def setTemp(self,temp):
@@ -51,7 +52,8 @@ class LaserBox:
                     raise ValueError
             except ValueError:
                 print("Insert a valid number!")
-        self.laser.write(("stt:"+temp+"\r\n".encode()))
+        tmp = "stt:"+temp+"\r\n"
+        self.laser.write(tmp.encode())
         return self.readLine()
     
     def getCurrent(self):
