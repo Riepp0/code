@@ -1,6 +1,6 @@
 from tkinter import *
-from serial import *
 from laserLib import *
+import pyqtgraph as pg
 
 
 laser = LaserBox()
@@ -127,6 +127,10 @@ def keepCurrent():
     current = laser.getCurrent()
     my_actual_current.config(text="Actual current: " + current)
 
+    timer = pg.Core.QTimer()
+    timer.timeout.connect(keepCurrent)
+    timer.start(1000)
+
 get_current = Button(root, text="Get current", command=keepCurrent)
 my_actual_current.grid(row=4, column=1)
 get_current.grid(row=4, column=0)
@@ -138,6 +142,10 @@ def keepTemp():
     """ Keep temperature """
     temp = laser.getTemp()
     my_actual_temp.config(text="Actual temperature: " + temp)
+
+    timer = pg.Core.QTimer()
+    timer.timeout.connect(keepTemp)
+    timer.start(1000)
 
 get_temp = Button(root, text="Actual temperature", command=keepTemp)
 my_actual_temp.grid(row=5, column=1)
