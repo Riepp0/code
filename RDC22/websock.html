@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+<html>
+
+<body>
+
+  <p>Before the script...</p>
+
+<script>
+// Create WebSocket connection.
+const socket = new WebSocket('ws://88.80.187.84:8181/ciao');
+
+// Connection opened
+socket.addEventListener('open', function (event) {
+    socket.send('Hello Server!');
+});
+
+function generate_table(testo) {
+  var body = document.getElementsByTagName("body")[0];
+  var tbl = document.createElement("table");
+  var tblBody = document.createElement("tbody");
+  var row = document.createElement("tr");
+  var cell = document.createElement("td");
+  var cellText = document.createTextNode(testo);
+  cell.appendChild(cellText);
+  row.appendChild(cell);
+  tblBody.appendChild(row);
+  tbl.appendChild(tblBody);
+  body.appendChild(tbl);
+  tbl.setAttribute("border", "1");
+}
+
+
+// Listen for messages
+socket.addEventListener('message', function (event) {
+		generate_table(event.data);
+    console.log('Message from server ', event.data);
+});
+
+
+
+</script>
+
+ <p>...After the script.</p>
+
+</body>
+
+</html>
