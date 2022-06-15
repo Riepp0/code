@@ -22,21 +22,28 @@ spectro.printDevices()
 spectro.setIntegrationTimeScript(10000000)
 
 # Set laser states
-# Check if spectrometer is saturated
-# If not, set the laser power to the desired value
-# If yes, do not save the file and print a warning
-for current in range(40,60):
-    for temp in range (20,30):
+mincurrent = 40
+mintemp = 20
+maxcurrent = 60
+maxtemp = 25
+for current in range(mincurrent,maxcurrent):
+    for temp in range (mintemp,maxtemp):
         laser.setCurrent(current)
         laser.setTemp(temp)
         if spectro.isSaturated():
             print("Saturated")
         else:
-            tmp = spectro.getSpectrum()
-            df = pd.DataFrame(tmp)
-            total = str(current * temp)
-            df.to_csv("laserSpectroScript"+"total.csv")
-
+            waveTmp = spectro.getWaveLength()
+            inteTmp = spectro.getIntensities()
+            total = (maxcurrent-mincurrent)*(maxtemp-mintemp)
+            df = []
+            for i in range(1, total + 1):
+                df[i] = pd.DataFrame(waveTmp, inteTmp, columns=['Wavelength', 'Intensity'])
+            for i in range(1, len(df) + 1):
+                alldata = alldata + df[i]
+            print(alldata)
+            alldata.to_csv('laserSpectroScript.csv', index=False) 
+            
 
 
 
