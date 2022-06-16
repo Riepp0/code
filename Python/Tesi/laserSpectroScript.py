@@ -2,7 +2,7 @@ import wave
 from spectroLib import *
 from laserLib import *
 import pandas as pd
-import time
+import numpy as np
 
 # Create laser object
 laser = LaserBox()
@@ -28,10 +28,10 @@ spectro.printDevices()
 # 0 to 90mA
 mincurrent = 40
 mintemp = 20
-maxcurrent = 60
-maxtemp = 25
+maxcurrent = 61
+maxtemp = 26
 for current in range(mincurrent,maxcurrent):
-    for temp in range (mintemp,maxtemp):
+    for temp in np.arange(mintemp,maxtemp,0.1):
         laser.setCurrent(current)
         laser.setTemp(temp)
         while(laser.getCurrent() in range(current-0.1,current+0.1) and (laser.getTemp() in range(temp-0.01,temp+0.01))):
