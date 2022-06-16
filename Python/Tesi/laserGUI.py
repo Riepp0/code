@@ -127,7 +127,7 @@ def keepCurrent():
     current = laser.getCurrent()
     my_actual_current.config(text="Actual current: " + current)
 
-    timer = pg.Core.QTimer()
+    timer = pg.QtCore.QTimer()
     timer.timeout.connect(keepCurrent)
     timer.start(1000)
 
@@ -143,7 +143,7 @@ def keepTemp():
     temp = laser.getTemp()
     my_actual_temp.config(text="Actual temperature: " + temp)
 
-    timer = pg.Core.QTimer()
+    timer = pg.QtCore.QTimer()
     timer.timeout.connect(keepTemp)
     timer.start(1000)
 

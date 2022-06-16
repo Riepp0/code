@@ -1,6 +1,8 @@
+import wave
 from spectroLib import *
 from laserLib import *
 import pandas as pd
+import time
 
 # Create laser object
 laser = LaserBox()
@@ -19,9 +21,11 @@ spectro = Spectro()
 spectro.printDevices()
 
 # Set the spectrometer integration time <-----------------------------------------
-spectro.setIntegrationTimeScript(10000000)
+
 
 # Set laser states
+# 10-60 decimal
+# 0 to 90mA
 mincurrent = 40
 mintemp = 20
 maxcurrent = 60
@@ -30,19 +34,17 @@ for current in range(mincurrent,maxcurrent):
     for temp in range (mintemp,maxtemp):
         laser.setCurrent(current)
         laser.setTemp(temp)
-        if spectro.isSaturated():
-            print("Saturated")
-        else:
-            waveTmp = spectro.getWaveLength()
-            inteTmp = spectro.getIntensities()
-            total = (maxcurrent-mincurrent)*(maxtemp-mintemp)
-            df = []
-            for i in range(1, total + 1):
-                df[i] = pd.DataFrame(waveTmp, inteTmp, columns=['Wavelength', 'Intensity'])
-            for i in range(1, len(df) + 1):
-                alldata = alldata + df[i]
-            print(alldata)
-            alldata.to_csv('laserSpectroScript.csv', index=False) 
+        while(laser.getCurrent() in range(current-0.1,current+0.1) and (laser.getTemp() in range(temp-0.01,temp+0.01))):
+            if spectro.isSaturated():
+                print("Saturated")
+            else:
+                waveTmp = spectro.getWaveLength()
+                inteTmp = spectro.getIntensities()
+                df = pd.DataFrame(columns=['WaveLength', 'Intensity', 'Current', 'Temperature'])
+                df.to_csv('Python\Tesi\CSV\laserSpectroScriptTest.csv',mode='a', index=False)
+                for i in range (0, len(waveTmp)):
+                    df = pd.DataFrame([[waveTmp[i], inteTmp[i], current, temp]])
+                    df.to_csv('Python\Tesi\CSV\laserSpectroScript.csv',mode='a', index=False, header=False)
             
 
 

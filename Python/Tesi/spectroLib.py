@@ -1,16 +1,13 @@
 from tkinter import Label
 
 import functools
-from pyparsing import line
 import seabreeze
 seabreeze.use('pyseabreeze')
 from seabreeze.spectrometers import list_devices, Spectrometer
 
 import pyqtgraph as pg
 from PyQt5.QtWidgets import QApplication
-from pyqtgraph.ptime import time
 
-import numpy as np
 
 class Spectro():
     """Creating a Spectrometer class"""
@@ -48,7 +45,7 @@ class Spectro():
             label.config(text="Time set!")
 
     def setIntegrationTimeScript(self,time):
-        """Set integration time"""
+        """Set integration time in microseconds"""
         return self.spectrometer.integration_time_micros(time)        
 
     def getWaveLength(self):
