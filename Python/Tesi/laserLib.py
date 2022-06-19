@@ -7,7 +7,7 @@ class LaserBox:
     def __init__(self):
         """ Initialize laser """
 
-        self.laser = Serial("COM6", timeout=3) 
+        self.laser = Serial("COM5", timeout=3) 
     
     def powerOn(self):
         """ Power on laser """
@@ -67,6 +67,20 @@ class LaserBox:
 
         self.laser.write("rtt?\r\n".encode())
         return self.readLine()
+
+    def getFloatCurrent(self):
+        """ Get current in floating point through serial command  """
+
+        self.laser.write("rli?\r\n".encode())
+        return float(self.readLine())
+
+    def getFloatTemp(self):
+        """ Get temperature in floating point through serial command  """
+
+        self.laser.write("rtt?\r\n".encode())
+        return float(self.readLine())
+
+
 ######################################################
     def getPower(self):
         """ Get power status """
