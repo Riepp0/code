@@ -10,9 +10,11 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
-struct sockaddr_in local, remote;
-char request[100000];
-char response[1000];
+//Server web CGI, permette di eseguire comandi
+
+struct sockaddr_in local, remote; //Strutture per indirizzi
+char request[100000]; //Buffer per la richiesta
+char response[1000]; //Buffer per la risposta
 
 struct header
 {
@@ -20,14 +22,14 @@ struct header
 	char *v;
 } h[100];
 
-unsigned char envbuf[1000];
-int pid;
-int env_i, env_c;
-char *env[100];
-int new_stdin, new_stdout;
-char *myargv[10];
+unsigned char envbuf[1000]; //Buffer per le variabili d'ambiente
+int pid; //Pid del processo figlio
+int env_i, env_c; //Contatori per le variabili d'ambiente
+char *env[100]; //Array per le variabili d'ambiente
+int new_stdin, new_stdout; //Puntatori per i file di input e output del processo figlio
+char *myargv[10]; //Array per gli argomenti del processo figlio
 
-void add_env(char *env_key, char *env_value)
+void add_env(char *env_key, char *env_value) //Aggiunge una variabile d'ambiente
 {
 	sprintf(envbuf + env_c, "%s=%s", env_key, env_value);
 	env[env_i++] = envbuf + env_c;
