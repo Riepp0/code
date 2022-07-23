@@ -8,7 +8,7 @@ import numpy as np
 laser = LaserBox()
 
 # Power on the laser
-laser.powerOn()
+# laser.powerOn()
 
 # Get laser states
 print(laser.getCurrent())
