@@ -1,6 +1,6 @@
 from serial import *
 
-class LaserBox:
+class OBISBox:
     """ Creating a laser class """
 
 
@@ -9,16 +9,40 @@ class LaserBox:
 
         self.laser = Serial("COM5", timeout=3) 
     
+    def printDevices(self):
+        """ Print all devices """
+
+        self.laser.write("*IDN?\r\n".encode())
+        return self.readLine()
+    
+    def checkHandshake(self):
+        """ Check handshake (default ON)"""
+
+        self.laser.write("SYST:COMM:HAND?\r\n".encode())
+        return self.readLine()
+
     def powerOn(self):
         """ Power on laser """
-        
-        self.laser.write("lon\r\n".encode())
-        return self.readLine()
+
+        self.laser.write("SOUR:AM:STAT ON\r\n".encode())
+        return self.readLine()    
 
     def powerOff(self):
         """ Power off laser """
 
-        self.laser.write("loff\r\n".encode())
+        self.laser.write("SOUR:AM:STAT OFF\r\n".encode())
+        return self.readLine()
+
+    def getWavelength(self):
+        """ Get wavelength of the laser"""
+
+        self.laser.write("SYST:INF:WAV?\r\n".encode())
+        return self.readLine()
+    
+    def getPower(self):
+        """ Get power status """
+
+        self.laser.write("SYST:INF:POW?\r\n".encode())
         return self.readLine()
 
     def setCurrent(self,current):
@@ -30,7 +54,7 @@ class LaserBox:
         else:
             try:
                 current = float(current)
-                if current < 40 or current > 60:
+                if current < 40 or current > 50:
                     raise ValueError
             except ValueError:
                 print("Insert a valid number!")
@@ -59,25 +83,25 @@ class LaserBox:
     def getCurrent(self):
         """ Get current through serial command  """
 
-        self.laser.write("rli?\r\n".encode())
+        self.laser.write("SOUR:POW:CURR?\r\n".encode())
         return self.readLine()
 
     def getTemp(self):
-        """ Get temperature through serial command """
+        """ Get temperature through serial command (default in C°)"""
 
-        self.laser.write("rtt?\r\n".encode())
+        self.laser.write("SOUR:TEMP:BAS?\r\n".encode())
         return self.readLine()
 
     def getFloatCurrent(self):
         """ Get current in floating point through serial command  """
 
-        self.laser.write("rli?\r\n".encode())
+        self.laser.write("SOUR:POW:CURR?\r\n".encode())
         return float(self.readLine())
 
     def getFloatTemp(self):
-        """ Get temperature in floating point through serial command  """
+        """ Get temperature in floating point through serial command  (default in C°)"""
 
-        self.laser.write("rtt?\r\n".encode())
+        self.laser.write("SOUR:TEMP:BAS?\r\n".encode())
         return float(self.readLine())
 
 
