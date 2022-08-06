@@ -8,7 +8,8 @@ import numpy as np
 laser = OBISBox()
 
 # Power on the laser
-# laser.powerOn()
+laser.powerOn()
+laser.checkHandshake()
 
 # Get laser states
 print(laser.getCurrent())
@@ -24,7 +25,7 @@ spectro.printDevices()
 
 
 # Set laser states
-# 10-60 decimal
+# 10-45° C baseplate range 
 # 0 to 90mA
 mincurrent = 40
 mintemp = 20
@@ -57,4 +58,4 @@ spectro.terminate()
 
 
 # Power off the laser
-#laser.powerOff()
+laser.powerOff()

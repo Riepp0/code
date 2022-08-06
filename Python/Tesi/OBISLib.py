@@ -106,23 +106,6 @@ class OBISBox:
 
 
 ######################################################
-    def getPower(self):
-        """ Get power status """
-
-        self.laser.write("rlp?\r\n".encode())
-        return self.readLine()
-    
-    def getSystemFirmware(self):
-        """ Get system firmware """
-
-        self.laser.write("rsv?\r\n".encode())
-        return self.readLine()
-
-    def getSerialNumber(self):
-        """ Get serial number """
-
-        self.laser.write("rsn?\r\n".encode())
-        return self.readLine()
     
     def readLine(self):
         """ Read line from serial port """
