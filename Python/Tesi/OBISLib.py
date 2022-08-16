@@ -48,7 +48,6 @@ class OBISBox:
     def setCurrent(self,current):
         """ Set current through serial command 
             @param current: float """
-        print(isinstance(current, float) or isinstance(current, int))
         if isinstance(current, float) or isinstance(current, int):
             current = '{0:.4f}'.format(current)
         else:
@@ -65,8 +64,6 @@ class OBISBox:
     def setTemp(self,temp):
         """ Set temperature through serial command 
             @param temp: float """
-
-        print(isinstance(temp, float) or isinstance(temp, int))
         if isinstance(temp, float) or isinstance(temp, int):
             temp = '{0:.4f}'.format(temp)
         else:
