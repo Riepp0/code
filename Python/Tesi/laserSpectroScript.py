@@ -1,5 +1,5 @@
 import wave
-from spectroLib import *
+from spectrometer import *
 from laserLib import *
 import pandas as pd
 import numpy as np

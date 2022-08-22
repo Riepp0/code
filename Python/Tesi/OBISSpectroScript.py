@@ -1,5 +1,5 @@
 import wave
-from spectroLib import *
+from spectrometer import *
 from OBISLib import *
 import pandas as pd
 import numpy as np

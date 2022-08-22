@@ -1,14 +1,17 @@
 from serial import *
 
-class OBISBox:
+from Python.Tesi.laserDevice import Laser
+
+class OBISBox(Laser):
     """ Creating a laser class """
 
 
     def __init__(self):
         """ Initialize laser """
 
-        self.laser = Serial("COM5", timeout=3) 
+        super().__init__()
     
+    # Overriding abstractmethod
     def printDevices(self):
         """ Print all devices """
 
@@ -21,12 +24,14 @@ class OBISBox:
         self.laser.write("SYST:COMM:HAND?\r\n".encode())
         return self.readLine()
 
+    # Overriding abstractmethod
     def powerOn(self):
         """ Power on laser """
 
         self.laser.write("SOUR:AM:STAT ON\r\n".encode())
         return self.readLine()    
 
+    # Overriding abstractmethod
     def powerOff(self):
         """ Power off laser """
 
@@ -45,6 +50,7 @@ class OBISBox:
         self.laser.write("SYST:INF:POW?\r\n".encode())
         return self.readLine()
 
+    # Overriding abstractmethod
     def setCurrent(self,current):
         """ Set current through serial command 
             @param current: float """
@@ -61,6 +67,7 @@ class OBISBox:
         self.laser.write(tmp.encode())
         return self.readLine()
 
+    # Overriding abstractmethod
     def setTemp(self,temp):
         """ Set temperature through serial command 
             @param temp: float """
@@ -77,24 +84,28 @@ class OBISBox:
         self.laser.write(tmp.encode())
         return self.readLine()
     
+    # Overriding abstractmethod
     def getCurrent(self):
         """ Get current through serial command  """
 
         self.laser.write("SOUR:POW:CURR?\r\n".encode())
         return self.readLine()
 
+    # Overriding abstractmethod
     def getTemp(self):
         """ Get temperature through serial command (default in C°)"""
 
         self.laser.write("SOUR:TEMP:BAS?\r\n".encode())
         return self.readLine()
 
+    # Overriding abstractmethod
     def getFloatCurrent(self):
         """ Get current in floating point through serial command  """
 
         self.laser.write("SOUR:POW:CURR?\r\n".encode())
         return float(self.readLine())
 
+    # Overriding abstractmethod
     def getFloatTemp(self):
         """ Get temperature in floating point through serial command  (default in C°)"""
 
@@ -107,7 +118,7 @@ class OBISBox:
     def readLine(self):
         """ Read line from serial port """
 
-        return self.laser.readline().decode("utf-8")
+        super().readLine()
     
 
     

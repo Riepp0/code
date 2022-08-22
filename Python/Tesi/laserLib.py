@@ -1,26 +1,30 @@
 from serial import *
 
-class LaserBox:
+from Python.Tesi.laserDevice import Laser
+
+class LaserBox(Laser):
     """ Creating a laser class """
 
 
     def __init__(self):
         """ Initialize laser """
-
-        self.laser = Serial("COM5", timeout=3) 
+        super().__init__()
     
+    # Overriding abstractmethod
     def powerOn(self):
         """ Power on laser """
         
         self.laser.write("lon\r\n".encode())
         return self.readLine()
 
+    # Overriding abstractmethod
     def powerOff(self):
         """ Power off laser """
 
         self.laser.write("loff\r\n".encode())
         return self.readLine()
-
+    
+    # Overriding abstractmethod
     def setCurrent(self,current):
         """ Set current through serial command 
             @param current: float """
@@ -37,6 +41,7 @@ class LaserBox:
         self.laser.write(tmp.encode())
         return self.readLine()
 
+    # Overriding abstractmethod
     def setTemp(self,temp):
         """ Set temperature through serial command 
             @param temp: float """
@@ -53,24 +58,28 @@ class LaserBox:
         self.laser.write(tmp.encode())
         return self.readLine()
     
+    # Overriding abstractmethod
     def getCurrent(self):
         """ Get current through serial command  """
 
         self.laser.write("rli?\r\n".encode())
         return self.readLine()
-
+    
+    # Overriding abstractmethod
     def getTemp(self):
         """ Get temperature through serial command """
 
         self.laser.write("rtt?\r\n".encode())
         return self.readLine()
 
+    # Overriding abstractmethod
     def getFloatCurrent(self):
         """ Get current in floating point through serial command  """
 
         self.laser.write("rli?\r\n".encode())
         return float(self.readLine())
 
+    # Overriding abstractmethod
     def getFloatTemp(self):
         """ Get temperature in floating point through serial command  """
 
@@ -100,7 +109,7 @@ class LaserBox:
     def readLine(self):
         """ Read line from serial port """
 
-        return self.laser.readline().decode("utf-8")
+        super().readLine()
     
 
     
