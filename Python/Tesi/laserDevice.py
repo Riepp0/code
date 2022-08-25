@@ -11,11 +11,6 @@ class Laser(Device,ABC):
 
         self.laser = Serial("COM5", timeout=3)
 
-    def readLine(self):
-        """ Read line """
-
-        return self.laser.readline().decode("utf-8")
-
     @abstractmethod
     def powerOff(self):
         pass

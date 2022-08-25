@@ -1,3 +1,4 @@
+import time
 from spectrometer import *
 from OBISLib import *
 import pandas as pd
