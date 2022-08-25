@@ -1,4 +1,3 @@
-import wave
 from spectrometer import *
 from OBISLib import *
 import pandas as pd

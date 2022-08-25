@@ -1,6 +1,6 @@
 from serial import *
 
-from Python.Tesi.laserDevice import Laser
+from laserDevice import Laser
 
 class LaserBox(Laser):
     """ Creating a laser class """

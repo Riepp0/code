@@ -12,7 +12,4 @@ class Device(ABC):
     def powerOff(self):
         pass
 
-    @abstractmethod
-    def printDevices(self):
-        pass
 

@@ -19,22 +19,10 @@ class Laser(Device,ABC):
     @abstractmethod
     def powerOff(self):
         pass
-
-    @abstractmethod
-    def printDevices(self):
-        pass
     
     @abstractmethod
     def powerOn(self):
         pass
-
-    """
-    def powerOff(self):
-
-
-        self.laser.write("loff\r\n".encode())
-        return self.readLine()
-    """
 
     @abstractmethod
     def setCurrent(self,current):
