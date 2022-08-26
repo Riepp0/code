@@ -33,8 +33,8 @@ maxcurrent = 61
 maxtemp = 26
 for current in range(mincurrent,maxcurrent):
     for temp in np.arange(mintemp,maxtemp,0.1):
-        laser.setCurrent(current)
-        laser.setTemp(temp)
+        laser.setCurrent(current,mincurrent,maxcurrent)
+        laser.setTemp(temp,mintemp,maxtemp)
         while(((laser.getFloatCurrent() < current-2) or (laser.getFloatCurrent() > current+2)) or (laser.getFloatTemp() < temp-0.05) or (laser.getFloatTemp() > temp+0.05)):
             time.sleep(1)
         if spectro.isSaturated():

@@ -55,7 +55,7 @@ class OBISBox(Laser):
         return self.laser.query("SOUR:POW:LEV?")
 
     # Overriding abstractmethod
-    def setCurrent(self,current):
+    def setCurrent(self,current,minCurrent,maxCurrent):
         """ Set current through serial command 
             @param current: float """
         if isinstance(current, float) or isinstance(current, int):
@@ -63,7 +63,7 @@ class OBISBox(Laser):
         else:
             try:
                 current = float(current)
-                if current < 40 or current > 50:
+                if current < minCurrent or current > maxCurrent:
                     raise ValueError
             except ValueError:
                 print("Insert a valid number!")
@@ -71,7 +71,7 @@ class OBISBox(Laser):
         return self.laser.query(tmp)
 
     # Overriding abstractmethod
-    def setTemp(self,temp):
+    def setTemp(self,temp,minTemp,maxTemp):
         """ Set temperature through serial command 
             @param temp: float """
         if isinstance(temp, float) or isinstance(temp, int):
@@ -79,7 +79,7 @@ class OBISBox(Laser):
         else:
             try:
                 temp = float(temp)
-                if temp < 20 or temp > 25:
+                if temp < minTemp or temp > maxTemp:
                     raise ValueError
             except ValueError:
                 print("Insert a valid number!")
