@@ -69,7 +69,7 @@ class OBISBox(Laser):
             except ValueError:
                 print("Insert a valid number!")
         #tmp = "SOUR:POW:CURR: "+current
-        return self.laser.source.power.current(current)
+        #return self.laser.source.power.current(current)
 
     # Overriding abstractmethod
     def setTemp(self,temp,minTemp,maxTemp):
