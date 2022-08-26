@@ -42,12 +42,13 @@ class OBISBox(Laser):
 
     def setPower(self,power):
         """Set power"""
+
         if power < float(self.laser.source.power.limit.low()):
             raise ValueError("Power too low")
         elif power > float(self.laser.source.power.limit.high()):
             raise ValueError("Power too high")
 
-        return self.laser.source.power.level.immediate.amplitude(power)#("SOUR:POW:LEV:IMM:AMPL: "+ str(power))
+        return self.laser.source.power.level.immediate.amplitude(power)
     
     def getPower(self):
         """ Get power status """

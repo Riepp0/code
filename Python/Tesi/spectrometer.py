@@ -69,7 +69,6 @@ class Spectro(Device):
     def isSaturated(self):
         """Check if spectrum is saturated"""
         if max(self.getIntensities()) > 0.9 * self.spectrometer.max_intensity:
-            print(max(self.getIntensities()))
             return True
         else:
             return False

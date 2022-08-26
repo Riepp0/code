@@ -86,6 +86,22 @@ class LaserBox(Laser):
         self.laser.write("rtt?\r\n".encode())
         return float(self.readLine())
 
+    def setPower(self,power):
+        """Set power"""
+
+        if isinstance(power, float) or isinstance(power, int):
+            power = '{0:.4f}'.format(power)
+        else:
+            try:
+                power = float(power)
+                if power < 0 or power > 1:
+                    raise ValueError
+            except ValueError:
+                print("Insert a valid number!")
+        tmp = "slp:"+power+"\r\n"
+        self.laser.write(tmp.encode())
+        return self.readLine()
+
 
 ######################################################
     def getPower(self):

@@ -10,6 +10,7 @@ laser = OBISBox()
 # Power on the laser
 laser.powerOn()
 laser.checkHandshake()
+time.sleep(3)
 
 # Get laser states
 print(laser.getCurrent())
@@ -35,7 +36,7 @@ for current in range(mincurrent,maxcurrent):
     for temp in np.arange(mintemp,maxtemp,0.1):
         laser.setCurrent(current,mincurrent,maxcurrent)
         laser.setTemp(temp,mintemp,maxtemp)
-        while(((laser.getFloatCurrent() < current-2) or (laser.getFloatCurrent() > current+2)) or (laser.getFloatTemp() < temp-0.05) or (laser.getFloatTemp() > temp+0.05)):
+        while(((laser.getFloatCurrent() < current-0.1) or (laser.getFloatCurrent() > current+0.1)) or (laser.getFloatTemp() < temp-0.05) or (laser.getFloatTemp() > temp+0.05)):
             time.sleep(1)
         if spectro.isSaturated():
             print("Saturated")
@@ -47,7 +48,7 @@ for current in range(mincurrent,maxcurrent):
             currentArray = [laserCurrent] * len(waveTmp)
             tempArray = [laserTemp] * len(waveTmp)
             df = pd.DataFrame(list(zip(waveTmp, inteTmp, currentArray, tempArray)),columns=['WaveLength', 'Intensity', 'Current', 'Temperature'])
-            df.to_csv('Python\Tesi\CSV\laserSpectroScript.csv',index=False, mode='a')
+            df.to_csv('Python\Tesi\CSV\OBISSpectroScript.csv',index=False, mode='a')
 spectro.terminate()
             
 

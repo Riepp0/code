@@ -19,9 +19,6 @@ spectro = Spectro()
 # Get active spectrometer
 spectro.printDevices()
 
-# Set the spectrometer integration time <-----------------------------------------
-
-
 # Set laser states
 # 10-60 decimal
 # 0 to 90mA
