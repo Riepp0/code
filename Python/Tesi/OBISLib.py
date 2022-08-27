@@ -1,3 +1,4 @@
+from multiprocessing.sharedctypes import Value
 import easy_scpi as scpi
 
 from laserDevice import Laser
@@ -40,13 +41,11 @@ class OBISBox(Laser):
 
         return self.laser.query("SYST:INF:WAV?")
 
-    def setPower(self,power):
+    def setPower(self,power,minPower,maxPower):
         """Set power"""
 
-        if power < float(self.laser.source.power.limit.low()):
-            raise ValueError("Power too low")
-        elif power > float(self.laser.source.power.limit.high()):
-            raise ValueError("Power too high")
+        if power < minPower or power > maxPower:
+            raise ValueError("Wrong power value")
 
         return self.laser.source.power.level.immediate.amplitude(power)
     
@@ -108,13 +107,19 @@ class OBISBox(Laser):
     # Overriding abstractmethod
     def getFloatTemp(self):
         """ Get temperature in floating point through serial command  (default in C°)"""
-
-        return self.laser.query("SOUR:TEMP:BAS?")
+        strTemp = self.laser.query("SOUR:TEMP:DIOD?")
+        strTemp = strTemp[:-1]
+        return float(strTemp)
     
     def getState(self):
         """ Power on laser """
 
         return self.laser.query("SOUR:AM:STAT?")
+    
+    def getFloatPower(self):
+        """ Get power in floating point through serial command  """
+
+        return float(self.laser.query("SOUR:POW:LEV?"))
 
     
 
