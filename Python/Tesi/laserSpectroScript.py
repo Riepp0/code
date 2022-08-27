@@ -37,13 +37,11 @@ for current in range(mincurrent,maxcurrent):
             if(spectro.isSaturated() == True):
                 laser.powerOff()
             waveTmp = spectro.getWaveLength()
+            #waveTmp = np.delete(waveTmp, np.where(waveTmp > 420))
+            #waveTmp = np.delete(waveTmp, np.where(waveTmp < 390))
             inteTmp = spectro.getIntensities()
             laserCurrent = laser.getCurrent()
             laserTemp = laser.getTemp()
-            #currentArray = [laserCurrent] * len(waveTmp)
-            #tempArray = [laserTemp] * len(waveTmp)
-            #df = pd.DataFrame(list(zip(waveTmp, inteTmp, currentArray, tempArray)),columns=['WaveLength', 'Intensity', 'Current', 'Temperature'])
-            #df.to_csv('Python\Tesi\CSV\laserSpectroScript.csv',index=False, mode='a')
             np.savez('Python\Tesi\CSV\LaserScript\_'+str(laserCurrent)+'--'+str(laserTemp), x=waveTmp, y=inteTmp, current=laserCurrent, temp=laserTemp)
 
 spectro.terminate()

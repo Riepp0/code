@@ -47,13 +47,11 @@ for power in np.arange(minPower,maxPower,0.001):
             if(spectro.isSaturated() == True):
                 laser.powerOff()
             waveTmp = spectro.getWaveLength()
+            #waveTmp = np.delete(waveTmp, np.where(waveTmp > 420))
+            #waveTmp = np.delete(waveTmp, np.where(waveTmp < 390))
             inteTmp = spectro.getIntensities()
             laserPower = laser.getPower()
             laserTemp = laser.getTemp()
-            #currentArray = [laserCurrent] * len(waveTmp)
-            #tempArray = [laserTemp] * len(waveTmp)
-            #df = pd.DataFrame(list(zip(waveTmp, inteTmp, currentArray, tempArray)),columns=['WaveLength', 'Intensity', 'Current', 'Temperature'])
-            #df.to_csv('Python\Tesi\CSV\OBISSpectroScript.csv',index=False, mode='a')
             np.savez('Python\Tesi\CSV\OBISScript\_'+str(laserPower)+'--'+str(laserTemp), x=waveTmp, y=inteTmp, power=laserPower, temp=laserTemp)
 spectro.terminate()
             
