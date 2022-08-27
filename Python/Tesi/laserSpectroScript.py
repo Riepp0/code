@@ -1,5 +1,5 @@
-from spectrometer import *
-from laserLib import *
+from Spectrometer import *
+from LaserBox import *
 import pandas as pd
 import numpy as np
 
@@ -14,7 +14,7 @@ print(laser.getCurrent())
 print(laser.getTemp())
 
 # Create spectrometer object
-spectro = Spectro()
+spectro = Spectrometer()
 
 # Get active spectrometer
 spectro.printDevices()

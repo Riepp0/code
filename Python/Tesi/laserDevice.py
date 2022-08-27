@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
-from generalDevice import Device
+from GeneralDevice import GeneralDevice
 from serial import *
 
-class Laser(Device,ABC):
+class LaserDevice(GeneralDevice,ABC):
     """ Creating a laser class """
 
     # Overriding abstractmethod
@@ -20,15 +20,7 @@ class Laser(Device,ABC):
         pass
 
     @abstractmethod
-    def setCurrent(self,current):
-        pass
-
-    @abstractmethod
     def setTemp(self,temp):
-        pass
-    
-    @abstractmethod
-    def getCurrent(self):
         pass
 
     @abstractmethod
@@ -36,12 +28,16 @@ class Laser(Device,ABC):
         pass
 
     @abstractmethod
-    def getFloatCurrent(self):
+    def getCurrent(self):
         pass
 
     @abstractmethod
     def getFloatTemp(self):
         pass
+
+    def readLine(self):
+
+        return self.laser.readline().decode("utf-8")
 
 
 """
@@ -59,10 +55,6 @@ class Laser(Device,ABC):
 
         self.laser.write("rsn?\r\n".encode())
         return self.readLine()
-    
-    def readLine(self):
-
-        return self.laser.readline().decode("utf-8")
 """    
 
     

@@ -1,8 +1,8 @@
 from serial import *
 
-from laserDevice import Laser
+from LaserDevice import LaserDevice
 
-class LaserBox(Laser):
+class LaserBox(LaserDevice):
     """ Creating a laser class """
 
 
@@ -86,8 +86,13 @@ class LaserBox(Laser):
         self.laser.write("rtt?\r\n".encode())
         return float(self.readLine())
 
+    def readLine(self):
+        """ Read line from serial port """
+
+        super().readLine()
+"""
     def setPower(self,power):
-        """Set power"""
+        #Set power
 
         if isinstance(power, float) or isinstance(power, int):
             power = '{0:.4f}'.format(power)
@@ -102,31 +107,24 @@ class LaserBox(Laser):
         self.laser.write(tmp.encode())
         return self.readLine()
 
-
-######################################################
     def getPower(self):
-        """ Get power status """
+        # Get power status 
 
         self.laser.write("rlp?\r\n".encode())
         return self.readLine()
     
     def getSystemFirmware(self):
-        """ Get system firmware """
+        # Get system firmware 
 
         self.laser.write("rsv?\r\n".encode())
         return self.readLine()
 
     def getSerialNumber(self):
-        """ Get serial number """
+        # Get serial number 
 
         self.laser.write("rsn?\r\n".encode())
         return self.readLine()
-    
-    def readLine(self):
-        """ Read line from serial port """
-
-        super().readLine()
-    
+"""
 
     
 

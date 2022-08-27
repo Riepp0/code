@@ -1,8 +1,8 @@
-from spectrometer import *
+from Spectrometer import *
 from tkinter import *
 
 
-spectro = Spectro()
+spectro = Spectrometer()
 
 ### Create root object
 root = Tk()

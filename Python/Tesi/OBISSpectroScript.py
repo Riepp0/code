@@ -1,6 +1,6 @@
 import time
-from spectrometer import *
-from OBISLib import *
+from Spectrometer import *
+from OBISBox import *
 import pandas as pd
 import numpy as np
 
@@ -17,7 +17,7 @@ print(laser.getPower())
 print(laser.getTemp())
 
 # Create spectrometer object
-spectro = Spectro()
+spectro = Spectrometer()
 
 # Get active spectrometer
 spectro.printDevices()

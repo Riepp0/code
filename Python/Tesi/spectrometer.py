@@ -1,4 +1,4 @@
-from generalDevice import Device
+from GeneralDevice import GeneralDevice
 from tkinter import Label
 
 import functools
@@ -9,7 +9,7 @@ from seabreeze.spectrometers import list_devices, Spectrometer
 import pyqtgraph as pg
 from PyQt5.QtWidgets import QApplication
 
-class Spectro(Device):
+class Spectrometer(GeneralDevice):
     """Creating a Spectrometer class"""
 
     # Overriding abstractmethod
@@ -18,13 +18,12 @@ class Spectro(Device):
         self.spectrometer = Spectrometer.from_first_available()
 
     # Overriding abstractmethod
+    def powerOff(self):
+        self.spectrometer.close()
+
     def printDevices(self):
         """Print devices"""
         print(list_devices())
-
-    # Overriding abstractmethod
-    def powerOff(self):
-        self.spectrometer.close()
 
     def getSpectrometer(self):
         """Get spectrometer"""

@@ -1,5 +1,5 @@
 from tkinter import *
-from laserLib import *
+from LaserBox import *
 import pyqtgraph as pg
 
 

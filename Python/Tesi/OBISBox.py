@@ -1,9 +1,8 @@
-from multiprocessing.sharedctypes import Value
 import easy_scpi as scpi
 
-from laserDevice import Laser
+from LaserDevice import LaserDevice
 
-class OBISBox(Laser):
+class OBISBox(LaserDevice):
     """ Creating a laser class """
 
 
@@ -55,22 +54,6 @@ class OBISBox(Laser):
         return self.laser.query("SOUR:POW:LEV?")
 
     # Overriding abstractmethod
-    def setCurrent(self,current,minCurrent,maxCurrent):
-        """ Set current through serial command 
-            @param current: float """
-        if isinstance(current, float) or isinstance(current, int):
-            current = '{0:.4f}'.format(current)
-        else:
-            try:
-                current = float(current)
-                if current < minCurrent or current > maxCurrent:
-                    raise ValueError
-            except ValueError:
-                print("Insert a valid number!")
-        #tmp = "SOUR:POW:CURR: "+current
-        #return self.laser.source.power.current(current)
-
-    # Overriding abstractmethod
     def setTemp(self,temp,minTemp,maxTemp):
         """ Set temperature through serial command 
             @param temp: float """
@@ -120,6 +103,22 @@ class OBISBox(Laser):
         """ Get power in floating point through serial command  """
 
         return float(self.laser.query("SOUR:POW:LEV?"))
+
+    # Overriding abstractmethod
+    """def setCurrent(self,current,minCurrent,maxCurrent):
+         Set current through serial command 
+            @param current: float
+        if isinstance(current, float) or isinstance(current, int):
+            current = '{0:.4f}'.format(current)
+        else:
+            try:
+                current = float(current)
+                if current < minCurrent or current > maxCurrent:
+                    raise ValueError
+            except ValueError:
+                print("Insert a valid number!")
+        #tmp = "SOUR:POW:CURR: "+current
+        #return self.laser.source.power.current(current)"""
 
     
 

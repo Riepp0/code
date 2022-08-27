@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class Device(ABC):
+class GeneralDevice(ABC):
     """ Creating a general device class"""
 
     @abstractmethod
