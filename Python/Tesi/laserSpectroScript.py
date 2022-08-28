@@ -1,6 +1,5 @@
 from Spectrometer import *
 from LaserBox import *
-import pandas as pd
 import numpy as np
 
 # Create laser object

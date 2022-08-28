@@ -1,7 +1,6 @@
 import time
 from Spectrometer import *
 from OBISBox import *
-import pandas as pd
 import numpy as np
 
 # Create laser object
@@ -50,6 +49,8 @@ for power in np.arange(minPower,maxPower,0.001):
             #waveTmp = np.delete(waveTmp, np.where(waveTmp > 420))
             #waveTmp = np.delete(waveTmp, np.where(waveTmp < 390))
             inteTmp = spectro.getIntensities()
+            #waveTmp = np.delete(waveTmp, np.where(waveTmp > 420))
+            #waveTmp = np.delete(waveTmp, np.where(waveTmp < 390))
             laserPower = laser.getPower()
             laserTemp = laser.getTemp()
             np.savez('Python\Tesi\CSV\OBISScript\_'+str(laserPower)+'--'+str(laserTemp), x=waveTmp, y=inteTmp, power=laserPower, temp=laserTemp)
