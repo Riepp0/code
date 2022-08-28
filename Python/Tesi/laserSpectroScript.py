@@ -40,6 +40,8 @@ for current in range(mincurrent,maxcurrent):
             #waveTmp = np.delete(waveTmp, np.where(waveTmp > 420))
             #waveTmp = np.delete(waveTmp, np.where(waveTmp < 390))
             inteTmp = spectro.getIntensities()
+            #inteTmp = np.delete(inteTmp, np.where(waveTmp > 420))
+            #inteTmp = np.delete(inteTmp, np.where(waveTmp < 390))
             laserCurrent = laser.getCurrent()
             laserTemp = laser.getTemp()
             np.savez('Python\Tesi\CSV\LaserScript\_'+str(laserCurrent)+'--'+str(laserTemp), x=waveTmp, y=inteTmp, current=laserCurrent, temp=laserTemp)
