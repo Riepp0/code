@@ -23,15 +23,16 @@ spectro.printDevices()
 # 0 to 90mA
 mincurrent = 40
 mintemp = 20
-maxcurrent = 61
-maxtemp = 26
+maxcurrent = 42
+maxtemp = 22
 for current in range(mincurrent,maxcurrent):
     for temp in np.arange(mintemp,maxtemp,0.1):
         laser.setCurrent(current,mincurrent,maxcurrent)
         laser.setTemp(temp,mintemp,maxtemp)
-        while(((laser.getFloatCurrent() < current-2) or (laser.getFloatCurrent() > current+2)) or (laser.getFloatTemp() < temp-0.05) or (laser.getFloatTemp() > temp+0.05)):
+        while(((laser.getFloatCurrent() < current-1.6) or (laser.getFloatCurrent() > current+1.6)) or (laser.getFloatTemp() < temp-0.05) or (laser.getFloatTemp() > temp+0.05)):
             if (spectro.isSaturated() == True):
                 laser.powerOff()
+                print("Lo spettrometro si è saturato e il laser è stato spento")
                 break
             time.sleep(1)
         else:
@@ -43,9 +44,9 @@ for current in range(mincurrent,maxcurrent):
             inteTmp = spectro.getIntensities()
             waveTmp = waveTmp[index_low:index_high]
             inteTmp = inteTmp[index_low:index_high]
-            laserCurrent = laser.getCurrent()
-            laserTemp = laser.getTemp()
-            np.savez('Python\Tesi\CSV\LaserScript\_'+str(laserCurrent)+'--'+str(laserTemp), x=waveTmp, y=inteTmp, current=laserCurrent, temp=laserTemp)
+            laserCurrent = laser.getCurrent()[:-2]
+            laserTemp = laser.getTemp()[:-2]
+            np.savez('Python\Tesi\CSV\LaserScript\_'+str(laserCurrent)+'mA--'+str(laserTemp)+'C', x=waveTmp, y=inteTmp, current=laserCurrent, temp=laserTemp)
 
 spectro.powerOff()
             
@@ -57,4 +58,4 @@ spectro.powerOff()
 
 
 # Power off the laser
-#laser.powerOff()
+laser.powerOff()

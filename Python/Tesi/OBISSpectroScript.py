@@ -12,7 +12,7 @@ laser.checkHandshake()
 time.sleep(3)
 
 # Get laser states
-print(laser.getPower())
+print(laser.getPower()) # 0 in accensione
 print(laser.getTemp())
 
 # Create spectrometer object
@@ -29,7 +29,7 @@ spectro.printDevices()
 # 5 to 38 mW
 minPower = 0.005
 mintemp = 20
-maxPower = 0.008
+maxPower = 0.038
 maxtemp = 26
 laser.setPower(minPower,minPower,maxPower)
 laser.setTemp(mintemp,mintemp,maxtemp)
@@ -38,9 +38,12 @@ for power in np.arange(minPower,maxPower,0.001):
     for temp in np.arange(mintemp,maxtemp,0.1):
         laser.setPower(power,minPower,maxPower)
         laser.setTemp(temp,mintemp,maxtemp)
-        while(((laser.getFloatPower() < power-0.0005) or (laser.getFloatPower() > power+0.0005)) or (laser.getFloatTemp() < temp-0.05) or (laser.getFloatTemp() > temp+0.05)):
+        while(((laser.getFloatPower() < power-0.0004) or (laser.getFloatPower() > power+0.0004)) or (laser.getFloatTemp() < temp-0.05) or (laser.getFloatTemp() > temp+0.05)):
+            if (laser.getState() == 'OFF'):
+                laser.powerOn()
             if(spectro.isSaturated() == True):
                 laser.powerOff()
+                print("Lo spettrometro si è saturato e il laser è stato spento")
                 break
             time.sleep(1)
         else:
@@ -54,7 +57,7 @@ for power in np.arange(minPower,maxPower,0.001):
             inteTmp = inteTmp[index_low:index_high]
             laserPower = laser.getPower()
             laserTemp = laser.getTemp()
-            np.savez('Python\Tesi\CSV\OBISScript\_'+str(laserPower)+'--'+str(laserTemp), x=waveTmp, y=inteTmp, power=laserPower, temp=laserTemp)
+            np.savez('Python\Tesi\CSV\OBISScript\_'+str(laserPower)+'mW--'+str(laserTemp), x=waveTmp, y=inteTmp, power=laserPower, temp=laserTemp)
 spectro.powerOff()
             
 

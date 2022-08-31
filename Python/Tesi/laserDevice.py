@@ -9,7 +9,7 @@ class LaserDevice(GeneralDevice,ABC):
     def __init__(self):
         """ Initialize laser """
 
-        self.laser = Serial("COM5", timeout=3)
+        self.laser = Serial("COM6", timeout=3)
 
     @abstractmethod
     def powerOff(self):
@@ -36,8 +36,7 @@ class LaserDevice(GeneralDevice,ABC):
         pass
 
     def readLine(self):
-
-        return self.laser.readline().decode("utf-8")
+        pass
 
 
 """

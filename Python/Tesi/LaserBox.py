@@ -86,10 +86,10 @@ class LaserBox(LaserDevice):
         self.laser.write("rtt?\r\n".encode())
         return float(self.readLine())
 
-    def readLine(self):
+    def readLine(self) -> str:
         """ Read line from serial port """
 
-        super().readLine()
+        return self.laser.readline().decode("utf-8")
 """
     def setPower(self,power):
         #Set power
