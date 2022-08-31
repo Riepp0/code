@@ -22,9 +22,6 @@ spectro = Spectrometer()
 # Get active spectrometer
 spectro.printDevices()
 
-# Set the spectrometer integration time <-----------------------------------------
-
-
 # Set laser states
 # 10-45° C baseplate range 
 # 5 to 38 mW

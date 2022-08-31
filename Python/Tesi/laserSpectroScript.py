@@ -47,8 +47,8 @@ for current in range(mincurrent,maxcurrent):
             inteTmp = inteTmp[index_low:index_high]
             laserCurrent = laser.getCurrent()[:-2]
             laserTemp = laser.getTemp()[:-2]
-            date_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            np.savez('Python\Tesi\CSV\LaserScript\_'+str(laserCurrent)+'mA-'+str(laserTemp)+'C'+date_time, x=waveTmp, y=inteTmp, current=laserCurrent, temp=laserTemp)
+            date_time = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+            np.savez('Python\Tesi\CSV\LaserScript\_'+str(laserCurrent)+'mA-'+str(laserTemp)+'C_'+date_time, x=waveTmp, y=inteTmp, current=laserCurrent, temp=laserTemp)
 
 spectro.powerOff()
             
