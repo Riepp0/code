@@ -1,3 +1,4 @@
+from datetime import datetime
 import time
 from Spectrometer import *
 from OBISBox import *
@@ -30,7 +31,7 @@ spectro.printDevices()
 minPower = 0.005
 mintemp = 20
 maxPower = 0.038
-maxtemp = 26
+maxtemp = 30
 laser.setPower(minPower,minPower,maxPower)
 laser.setTemp(mintemp,mintemp,maxtemp)
 time.sleep(5)
@@ -57,7 +58,8 @@ for power in np.arange(minPower,maxPower,0.001):
             inteTmp = inteTmp[index_low:index_high]
             laserPower = laser.getPower()
             laserTemp = laser.getTemp()
-            np.savez('Python\Tesi\CSV\OBISScript\_'+str(laserPower)+'mW--'+str(laserTemp), x=waveTmp, y=inteTmp, power=laserPower, temp=laserTemp)
+            date_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            np.savez('Python\Tesi\CSV\OBISScript\_'+str(laserPower)+'mW-'+str(laserTemp) + date_time, x=waveTmp, y=inteTmp, power=laserPower, temp=laserTemp)
 spectro.powerOff()
             
 

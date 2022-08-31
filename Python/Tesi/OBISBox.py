@@ -66,7 +66,6 @@ class OBISBox(LaserDevice):
                     raise ValueError
             except ValueError:
                 print("Insert a valid number!")
-        #tmp = "SOUR:TEMP:DSET: "+temp
         return self.laser.source.temperature.dsetpoint(temp)
     
     # Overriding abstractmethod

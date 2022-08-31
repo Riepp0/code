@@ -1,3 +1,4 @@
+from datetime import datetime
 from Spectrometer import *
 from LaserBox import *
 import numpy as np
@@ -23,8 +24,8 @@ spectro.printDevices()
 # 0 to 90mA
 mincurrent = 40
 mintemp = 20
-maxcurrent = 42
-maxtemp = 22
+maxcurrent = 60
+maxtemp = 30
 for current in range(mincurrent,maxcurrent):
     for temp in np.arange(mintemp,maxtemp,0.1):
         laser.setCurrent(current,mincurrent,maxcurrent)
@@ -46,7 +47,8 @@ for current in range(mincurrent,maxcurrent):
             inteTmp = inteTmp[index_low:index_high]
             laserCurrent = laser.getCurrent()[:-2]
             laserTemp = laser.getTemp()[:-2]
-            np.savez('Python\Tesi\CSV\LaserScript\_'+str(laserCurrent)+'mA--'+str(laserTemp)+'C', x=waveTmp, y=inteTmp, current=laserCurrent, temp=laserTemp)
+            date_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            np.savez('Python\Tesi\CSV\LaserScript\_'+str(laserCurrent)+'mA-'+str(laserTemp)+'C'+date_time, x=waveTmp, y=inteTmp, current=laserCurrent, temp=laserTemp)
 
 spectro.powerOff()
             
@@ -58,4 +60,6 @@ spectro.powerOff()
 
 
 # Power off the laser
+mincurrent = 20
+laser.setCurrent(20,mincurrent,maxcurrent)
 laser.powerOff()
