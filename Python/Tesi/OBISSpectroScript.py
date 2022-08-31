@@ -38,23 +38,24 @@ for power in np.arange(minPower,maxPower,0.001):
     for temp in np.arange(mintemp,maxtemp,0.1):
         laser.setPower(power,minPower,maxPower)
         laser.setTemp(temp,mintemp,maxtemp)
-        while(((laser.getFloatPower() < power-0.001) or (laser.getFloatPower() > power+0.001)) or (laser.getFloatTemp() < temp-0.05) or (laser.getFloatTemp() > temp+0.05)):
+        while(((laser.getFloatPower() < power-0.0005) or (laser.getFloatPower() > power+0.0005)) or (laser.getFloatTemp() < temp-0.05) or (laser.getFloatTemp() > temp+0.05)):
             if(spectro.isSaturated() == True):
                 laser.powerOff()
+                break
             time.sleep(1)
         else:
             if(spectro.isSaturated() == True):
                 laser.powerOff()
             waveTmp = spectro.getWaveLength()
-            #waveTmp = np.delete(waveTmp, np.where(waveTmp > 420))
-            #waveTmp = np.delete(waveTmp, np.where(waveTmp < 390))
+            index_low = np.searchsorted(waveTmp, 390)
+            index_high = np.searchsorted(waveTmp, 420)
             inteTmp = spectro.getIntensities()
-            #waveTmp = np.delete(waveTmp, np.where(waveTmp > 420))
-            #waveTmp = np.delete(waveTmp, np.where(waveTmp < 390))
+            waveTmp = waveTmp[index_low:index_high]
+            inteTmp = inteTmp[index_low:index_high]
             laserPower = laser.getPower()
             laserTemp = laser.getTemp()
             np.savez('Python\Tesi\CSV\OBISScript\_'+str(laserPower)+'--'+str(laserTemp), x=waveTmp, y=inteTmp, power=laserPower, temp=laserTemp)
-spectro.terminate()
+spectro.powerOff()
             
 
 

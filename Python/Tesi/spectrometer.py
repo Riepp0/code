@@ -4,7 +4,7 @@ from tkinter import Label
 import functools
 import seabreeze
 seabreeze.use('pyseabreeze')
-from seabreeze.spectrometers import list_devices, Spectrometer
+from seabreeze.spectrometers import list_devices, Spectrometer as Spectro
 
 import pyqtgraph as pg
 from PyQt5.QtWidgets import QApplication
@@ -15,7 +15,7 @@ class Spectrometer(GeneralDevice):
     # Overriding abstractmethod
     def __init__(self):
         """Initialize spectrometer"""
-        self.spectrometer = Spectrometer.from_first_available()
+        self.spectrometer = Spectro.from_first_available()
 
     # Overriding abstractmethod
     def powerOff(self):

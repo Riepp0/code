@@ -32,20 +32,22 @@ for current in range(mincurrent,maxcurrent):
         while(((laser.getFloatCurrent() < current-2) or (laser.getFloatCurrent() > current+2)) or (laser.getFloatTemp() < temp-0.05) or (laser.getFloatTemp() > temp+0.05)):
             if (spectro.isSaturated() == True):
                 laser.powerOff()
+                break
+            time.sleep(1)
         else:
             if(spectro.isSaturated() == True):
                 laser.powerOff()
             waveTmp = spectro.getWaveLength()
-            #waveTmp = np.delete(waveTmp, np.where(waveTmp > 420))
-            #waveTmp = np.delete(waveTmp, np.where(waveTmp < 390))
+            index_low = np.searchsorted(waveTmp, 390)
+            index_high = np.searchsorted(waveTmp, 420)
             inteTmp = spectro.getIntensities()
-            #inteTmp = np.delete(inteTmp, np.where(waveTmp > 420))
-            #inteTmp = np.delete(inteTmp, np.where(waveTmp < 390))
+            waveTmp = waveTmp[index_low:index_high]
+            inteTmp = inteTmp[index_low:index_high]
             laserCurrent = laser.getCurrent()
             laserTemp = laser.getTemp()
             np.savez('Python\Tesi\CSV\LaserScript\_'+str(laserCurrent)+'--'+str(laserTemp), x=waveTmp, y=inteTmp, current=laserCurrent, temp=laserTemp)
 
-spectro.terminate()
+spectro.powerOff()
             
 
 
