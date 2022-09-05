@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from GeneralDevice import GeneralDevice
+from generalDevice import GeneralDevice
 from serial import *
 
 class LaserDevice(GeneralDevice,ABC):
@@ -9,7 +9,7 @@ class LaserDevice(GeneralDevice,ABC):
     def __init__(self):
         """ Initialize laser """
 
-        self.laser = Serial("COM6", timeout=3)
+        self.laser = Serial("/dev/ttyUSB2", timeout=3)
 
     @abstractmethod
     def powerOff(self):

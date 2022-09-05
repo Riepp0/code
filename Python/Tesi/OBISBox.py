@@ -1,6 +1,6 @@
 import easy_scpi as scpi
 
-from LaserDevice import LaserDevice
+from laserDevice import LaserDevice
 
 class OBISBox(LaserDevice):
     """ Creating a laser class """
@@ -9,7 +9,7 @@ class OBISBox(LaserDevice):
     def __init__(self):
         """ Initialize laser """
 
-        self.laser = scpi.Instrument("COM5", timeout=3000,handshake='OK',write_termination='\r\n',read_termination='\r\n')
+        self.laser = scpi.Instrument("/dev/ttyACM0", timeout=3000,handshake='OK',write_termination='\r\n',read_termination='\r\n')
         self.laser.connect()
     
     # Overriding abstractmethod

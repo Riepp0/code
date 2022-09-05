@@ -1,6 +1,6 @@
 from serial import *
 
-from LaserDevice import LaserDevice
+from laserDevice import LaserDevice
 
 class LaserBox(LaserDevice):
     """ Creating a laser class """
