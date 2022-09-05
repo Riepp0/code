@@ -1,4 +1,4 @@
-from GeneralDevice import GeneralDevice
+from generalDevice import GeneralDevice
 from tkinter import Label
 
 import functools
@@ -48,6 +48,8 @@ class Spectrometer(GeneralDevice):
 
     def setIntegrationTimeScript(self,time):
         """Set integration time in microseconds"""
+        if(time < 3800 or time > 10000000):
+            raise valueError("Time must be between 3800 and 100000 microseconds")
         return self.spectrometer.integration_time_micros(time)        
 
     def getWaveLength(self):
@@ -74,7 +76,7 @@ class Spectrometer(GeneralDevice):
         line = params[1]
         x = self.getWaveLength()
         y = self.getIntensities()
-        curve.setXRange(min(x), max(x))
+        curve.setXRange(400, 420)
         curve.setYRange(min(y), max(y))
         line.setData(x=x, y=y)
         

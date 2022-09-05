@@ -1,4 +1,4 @@
-from Spectrometer import *
+from spectrometer import *
 from tkinter import *
 
 

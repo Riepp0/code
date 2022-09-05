@@ -1,6 +1,6 @@
 from datetime import datetime
 import time
-from Spectrometer import *
+from spectrometer import *
 from OBISBox import *
 import numpy as np
 
@@ -19,6 +19,8 @@ print(laser.getTemp())
 # Create spectrometer object
 spectro = Spectrometer()
 
+spectro.setIntegrationTimeScript(20000)
+
 # Get active spectrometer
 spectro.printDevices()
 
@@ -34,16 +36,23 @@ laser.setTemp(mintemp,mintemp,maxtemp)
 time.sleep(5)
 for power in np.arange(minPower,maxPower,0.001):
     for temp in np.arange(mintemp,maxtemp,0.1):
+        print("Now setting power", power, "and temperature", temp)
         laser.setPower(power,minPower,maxPower)
         laser.setTemp(temp,mintemp,maxtemp)
+        counter = 0
         while(((laser.getFloatPower() < power-0.0004) or (laser.getFloatPower() > power+0.0004)) or (laser.getFloatTemp() < temp-0.05) or (laser.getFloatTemp() > temp+0.05)):
             if (laser.getState() == 'OFF'):
                 laser.powerOn()
             if(spectro.isSaturated() == True):
                 laser.powerOff()
-                print("Lo spettrometro si è saturato e il laser è stato spento")
+                print("The spectrometer has been saturated and the laser has been turned off")
                 break
             time.sleep(1)
+            laser.setTemp(temp,mintemp,maxtemp)
+            counter += 1
+            if counter == 50:
+                print("I could not set these options")
+                break
         else:
             if(spectro.isSaturated() == True):
                 laser.powerOff()
@@ -56,7 +65,7 @@ for power in np.arange(minPower,maxPower,0.001):
             laserPower = laser.getPower()
             laserTemp = laser.getTemp()
             date_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            np.savez('Python\Tesi\CSV\OBISScript\_'+str(laserPower)+'mW-'+str(laserTemp) + date_time, x=waveTmp, y=inteTmp, power=laserPower, temp=laserTemp)
+            np.savez('data//datiOBIS_'+str(laserPower)+'mW-'+str(laserTemp) + date_time, x=waveTmp, y=inteTmp, power=laserPower, temp=laserTemp)
 spectro.powerOff()
             
 

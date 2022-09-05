@@ -1,5 +1,5 @@
 from datetime import datetime
-from Spectrometer import *
+from spectrometer import *
 from LaserBox import *
 import numpy as np
 
@@ -16,6 +16,8 @@ print(laser.getTemp())
 # Create spectrometer object
 spectro = Spectrometer()
 
+spectro.setIntegrationTimeScript(10000)
+
 # Get active spectrometer
 spectro.printDevices()
 
@@ -28,14 +30,23 @@ maxcurrent = 60
 maxtemp = 30
 for current in range(mincurrent,maxcurrent):
     for temp in np.arange(mintemp,maxtemp,0.1):
+        print("Now setting current", current, "and temperature", temp)
         laser.setCurrent(current,mincurrent,maxcurrent)
         laser.setTemp(temp,mintemp,maxtemp)
-        while(((laser.getFloatCurrent() < current-1.6) or (laser.getFloatCurrent() > current+1.6)) or (laser.getFloatTemp() < temp-0.05) or (laser.getFloatTemp() > temp+0.05)):
+        counter = 0
+        while(((laser.getFloatCurrent() < current +1.2 -0.5) or (laser.getFloatCurrent() > current+1.2+0.5)) or (laser.getFloatTemp() < temp-0.03) or (laser.getFloatTemp() > temp+0.03)):
             if (spectro.isSaturated() == True):
+                mincurrent = 20
+                laser.setCurrent(20,mincurrent,maxcurrent)
                 laser.powerOff()
-                print("Lo spettrometro si è saturato e il laser è stato spento")
+                print("The spectrometer has been saturated and the laser current has been lowered")
                 break
             time.sleep(1)
+            laser.setTemp(temp,mintemp,maxtemp)
+            counter += 1
+            if counter == 20:
+                print("I could not set these options")
+                break
         else:
             if(spectro.isSaturated() == True):
                 laser.powerOff()
@@ -48,7 +59,7 @@ for current in range(mincurrent,maxcurrent):
             laserCurrent = laser.getCurrent()[:-2]
             laserTemp = laser.getTemp()[:-2]
             date_time = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
-            np.savez('Python\Tesi\CSV\LaserScript\_'+str(laserCurrent)+'mA-'+str(laserTemp)+'C_'+date_time, x=waveTmp, y=inteTmp, current=laserCurrent, temp=laserTemp)
+            np.savez('data//dati_'+str(laserCurrent)+'mA-'+str(laserTemp)+'C_'+date_time, x=waveTmp, y=inteTmp, current=laserCurrent, temp=laserTemp)
 
 spectro.powerOff()
             
