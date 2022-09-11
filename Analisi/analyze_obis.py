@@ -73,7 +73,7 @@ plot = ax.scatter(all_powers, all_temperatures, c =all_widths, marker = "o")
 ax.set_xlabel("Potenza [W]")
 ax.set_ylabel("Temperatura [°C]")
 cbar = fig.colorbar(plot, ax = ax)
-cbar.ax.set_ylabel('Lunghezza del picco (Std. Dev.) [nm]', rotation=270, labelpad=20)
+cbar.ax.set_ylabel('Larghezza del picco (Std. Dev.) [nm]', rotation=270, labelpad=20)
 fig.savefig("linewidthOBIS.pdf", bbox_inches = "tight")
 
 fig2 = plt.figure()
