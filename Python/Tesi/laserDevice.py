@@ -7,35 +7,71 @@ class LaserDevice(GeneralDevice,ABC):
 
     # Overriding abstractmethod
     def __init__(self):
-        """ Initialize laser """
-
+        '''
+        Il costruttore crea un oggetto LaserDevice
+        
+        @param self: l'oggetto LaserDevice
+        '''
         self.laser = Serial("/dev/ttyUSB2", timeout=3)
 
     @abstractmethod
     def powerOff(self):
+        '''
+        Il metodo spegne il laser
+        
+        @param self: l'oggetto LaserDevice'''
         pass
     
     @abstractmethod
     def powerOn(self):
+        '''
+        Il metodo accende il laser
+        
+        @param self: l'oggetto LaserDevice
+        '''
         pass
 
     @abstractmethod
     def setTemp(self,temp):
+        '''
+        Il metodo imposta la temperatura del laser      
+
+        @param self: l'oggetto LaserDevice
+        @param temp: temperatura in gradi centigradi
+        '''
         pass
 
     @abstractmethod
     def getTemp(self):
+        '''
+        Il metodo restituisce la temperatura del laser
+        
+        @param self: l'oggetto LaserDevice
+        '''
         pass
 
     @abstractmethod
     def getCurrent(self):
+        '''
+        Il metodo restituisce la corrente del laser
+        
+        @param self: l'oggetto LaserDevice'''
         pass
 
     @abstractmethod
     def getFloatTemp(self):
+        '''
+        Il metodo restituisce la temperatura del laser in gradi centigradi
+        
+        @param self: l'oggetto LaserDevice'''
         pass
 
     def readLine(self):
+        '''
+        Il metodo restituisce la stringa letta dal laser
+        
+        @param self: l'oggetto LaserDevice
+        '''
         pass
 
 

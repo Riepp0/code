@@ -7,27 +7,46 @@ class LaserBox(LaserDevice):
 
 
     def __init__(self):
-        """ Initialize laser """
+        '''
+        Il costruttore crea un oggetto LaserBox dal primo laser rilevato connesso e disponibile per l'utilizzo
+        
+        @param self: l'oggetto LaserBox
+        '''
         super().__init__()
     
     # Overriding abstractmethod
     def powerOn(self):
-        """ Power on laser """
+        '''
+        Il metodo accende il laser
         
+        @param self: l'oggetto LaserBox
+        '''
         self.laser.write("lon\r\n".encode())
         return self.readLine()
 
     # Overriding abstractmethod
     def powerOff(self):
-        """ Power off laser """
-
+        '''
+        Il metodo spegne il laser
+        
+        @param self: l'oggetto LaserBox
+        '''
         self.laser.write("loff\r\n".encode())
         return self.readLine()
     
     # Overriding abstractmethod
     def setCurrent(self,current,minCurrent,maxCurrent):
-        """ Set current through serial command 
-            @param current: float """
+        '''
+        Il metodo imposta la corrente del laser
+
+        @param self: l'oggetto LaserBox
+        @param current: corrente in mA
+        @param minCurrent: corrente minima
+        @param maxCurrent: corrente massima
+
+        @return: stringa di conferma
+        '''
+
         if isinstance(current, float) or isinstance(current, int):
             current = '{0:.4f}'.format(current)
         else:
@@ -43,8 +62,16 @@ class LaserBox(LaserDevice):
 
     # Overriding abstractmethod
     def setTemp(self,temp,minTemp,maxTemp):
-        """ Set temperature through serial command 
-            @param temp: float """
+        '''
+        Il metodo imposta la temperatura del laser
+        
+        @param self: l'oggetto LaserBox
+        @param temp: temperatura in gradi centigradi
+        @param minTemp: temperatura minima
+        @param maxTemp: temperatura massima
+
+        @return: stringa di conferma
+        '''
         if isinstance(temp, float) or isinstance(temp, int):
             temp = '{0:.4f}'.format(temp)
         else:
@@ -60,35 +87,60 @@ class LaserBox(LaserDevice):
     
     # Overriding abstractmethod
     def getCurrent(self):
-        """ Get current through serial command  """
-
+        ''''
+        Il metodo restituisce la corrente del laser
+        
+        @param self: l'oggetto LaserBox
+        
+        @return: corrente in mA
+        '''
         self.laser.write("rli?\r\n".encode())
         return self.readLine()
     
     # Overriding abstractmethod
     def getTemp(self):
-        """ Get temperature through serial command """
-
+        '''
+        Il metodo restituisce la temperatura del laser
+        
+        @param self: l'oggetto LaserBox
+        
+        @return: temperatura in gradi centigradi
+        '''
         self.laser.write("rtt?\r\n".encode())
         return self.readLine()
 
     # Overriding abstractmethod
     def getFloatCurrent(self):
-        """ Get current in floating point through serial command  """
-
+        '''
+        Il metodo restituisce la corrente del laser
+        
+        @param self: l'oggetto LaserBox
+        
+        @return: corrente in mA
+        '''
         self.laser.write("rli?\r\n".encode())
         return float(self.readLine())
 
     # Overriding abstractmethod
     def getFloatTemp(self):
-        """ Get temperature in floating point through serial command  """
-
+        '''
+        Il metodo restituisce la temperatura del laser
+        
+        @param self: l'oggetto LaserBox
+        
+        @return: temperatura in gradi centigradi
+        '''
         self.laser.write("rtt?\r\n".encode())
         return float(self.readLine())
 
     def readLine(self) -> str:
-        """ Read line from serial port """
-
+        '''
+        Il metodo legge una riga dal laser
+        
+        @param self: l'oggetto LaserBox
+        
+        @return: stringa letta
+        '''
         return self.laser.readline().decode("utf-8")
 """
     def setPower(self,power):
